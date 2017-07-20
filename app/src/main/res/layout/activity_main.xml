@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.kimjunhong.seoulculture.MainActivity">
+    tools:context="com.kimjunhong.seoulculture.activity.MainActivity">
 
     <include layout="@layout/view_toolbar" />
 
@@ -13,7 +13,8 @@
         android:id="@+id/gridView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_margin="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
         android:horizontalSpacing="10dp"
         android:numColumns="2"
         android:verticalSpacing="10dp" />

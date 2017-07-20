@@ -16,6 +16,9 @@ public interface CultureService {
     @GET("{START_INDEX}/{END_INDEX}/")
     Call<Data> getCultures(@Path("START_INDEX") int start, @Path("END_INDEX") int end);
 
+    @GET("{START_INDEX}/{END_INDEX}/{CULT_CODE}")
+    Call<Data> getCulture(@Path("START_INDEX") int start, @Path("END_INDEX") int end, @Path("CULT_CODE") int code);
+
     Retrofit retrofit = new Retrofit.Builder()
                                     .baseUrl("http://openAPI.seoul.go.kr:8088/534b785a656a686b36316d74485745/json/SearchConcertDetailService/")
                                     .addConverterFactory(GsonConverterFactory.create())

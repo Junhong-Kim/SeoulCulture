@@ -1,10 +1,12 @@
-package com.kimjunhong.seoulculture;
+package com.kimjunhong.seoulculture.activity;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.AbsListView;
 import android.widget.GridView;
 
+import com.kimjunhong.seoulculture.CultureService;
+import com.kimjunhong.seoulculture.R;
 import com.kimjunhong.seoulculture.adapter.GridViewAdapter;
 import com.kimjunhong.seoulculture.item.GridCultureItem;
 import com.kimjunhong.seoulculture.model.Culture;
