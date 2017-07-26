@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/menu_culture_event"
+        android:enabled="true"
+        android:icon="@drawable/ic_culture_event"
+        android:title="문화행사"
+        app:showAsAction="ifRoom" />
+
+    <item android:title="@null" />
+
+    <item
+        android:id="@+id/menu_culture_space"
+        android:enabled="true"
+        android:icon="@drawable/ic_culture_space"
+        android:title="문화공간"
+        app:showAsAction="ifRoom" />
+</menu>

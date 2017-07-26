@@ -45,7 +45,7 @@
                         android:layout_height="wrap_content"
                         android:background="@color/positive"
                         android:padding="5dp"
-                        android:text="무료구분"
+                        android:text="무료"
                         android:textColor="@color/white" />
 
                     <TextView
@@ -124,7 +124,7 @@
                         style="@style/MediumFont"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="2017-07-19"
+                        android:text="0000-00-00"
                         android:textColor="@color/colorPrimary" />
                 </LinearLayout>
 
@@ -149,7 +149,7 @@
                         android:paddingLeft="10dp"
                         android:paddingRight="10dp"
                         android:paddingTop="2dp"
-                        android:text="오늘"
+                        android:text="오늘 종료"
                         android:textColor="#757575" />
                 </FrameLayout>
 
@@ -173,7 +173,7 @@
                         style="@style/MediumFont"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="2017-07-19"
+                        android:text="0000-00-900"
                         android:textColor="@color/colorPrimary" />
                 </LinearLayout>
             </LinearLayout>

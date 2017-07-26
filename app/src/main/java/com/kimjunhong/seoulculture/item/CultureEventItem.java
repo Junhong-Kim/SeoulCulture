@@ -4,7 +4,7 @@ package com.kimjunhong.seoulculture.item;
  * Created by INMA on 2017. 7. 16..
  */
 
-public class GridCultureItem {
+public class CultureEventItem {
     int cultCode;
     String mainImage;
     String isFree;
@@ -15,7 +15,7 @@ public class GridCultureItem {
     String strtDate;
     String endDate;
 
-    public GridCultureItem(int cultCode, String mainImage, String isFree, String codeName, String title, String gCode, String place, String strtDate, String endDate) {
+    public CultureEventItem(int cultCode, String mainImage, String isFree, String codeName, String title, String gCode, String place, String strtDate, String endDate) {
         this.cultCode = cultCode;
         this.mainImage = mainImage;
         this.isFree = isFree;

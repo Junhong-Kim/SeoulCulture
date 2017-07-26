@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/gridView_item_layout"
+    android:id="@+id/cultureEvent_item_layout"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:background="@color/white"
@@ -11,27 +11,27 @@
         android:layout_height="wrap_content">
 
         <ImageView
-            android:id="@+id/gridView_item_mainImage"
+            android:id="@+id/cultureEvent_item_mainImage"
             android:layout_width="match_parent"
             android:layout_height="180dp"
-            android:src="@mipmap/ic_launcher" />
+            android:src="@drawable/ic_seoul_symbol" />
 
         <TextView
-            android:id="@+id/gridView_item_isFree"
+            android:id="@+id/cultureEvent_item_isFree"
             style="@style/SmallFont"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:background="@color/positive"
             android:padding="5dp"
-            android:text="무료구분"
+            android:text="구분"
             android:textColor="@color/white" />
     </RelativeLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/gridView_item_mainImage"
+        android:layout_alignBottom="@+id/cultureEvent_item_mainImage"
         android:layout_margin="5dp"
         android:orientation="vertical">
 
@@ -42,7 +42,7 @@
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/gridView_item_codeName"
+                android:id="@+id/cultureEvent_item_codeName"
                 style="@style/MediumFont"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -50,7 +50,7 @@
                 android:textStyle="bold" />
 
             <ImageView
-                android:id="@+id/gridView_item_bookmark"
+                android:id="@+id/cultureEvent_item_bookmark"
                 android:layout_width="18dp"
                 android:layout_height="18dp"
                 android:layout_marginLeft="2dp"
@@ -58,13 +58,15 @@
         </LinearLayout>
 
         <TextView
-            android:id="@+id/gridView_item_title"
+            android:id="@+id/cultureEvent_item_title"
             style="@style/SmallFont"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:ellipsize="end"
             android:maxLines="1"
-            android:text="제목" />
+            android:text="제목"
+            android:textColor="@color/colorPrimary"
+            android:textStyle="bold" />
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -72,49 +74,52 @@
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/gridView_item_gCode"
+                android:id="@+id/cultureEvent_item_gCode"
                 style="@style/SmallFont"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="2dp"
                 android:text="자치구"
-                android:textColor="@color/gray" />
+                android:textColor="@color/black" />
 
             <TextView
-                android:id="@+id/gridView_item_place"
+                android:id="@+id/cultureEvent_item_place"
                 style="@style/SmallFont"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:ellipsize="end"
                 android:maxLines="1"
                 android:text="장소"
-                android:textColor="@color/gray" />
+                android:textColor="@color/black" />
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/gridView_item_strtDate"
+                android:id="@+id/cultureEvent_item_strtDate"
                 style="@style/SmallFont"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="2017-07-16" />
+                android:text="0000-00-00"
+                android:textColor="@color/gray" />
 
             <TextView
                 style="@style/SmallFont"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text=" ~ " />
+                android:text=" ~ "
+                android:textColor="@color/gray" />
 
             <TextView
-                android:id="@+id/gridView_item_endDate"
+                android:id="@+id/cultureEvent_item_endDate"
                 style="@style/SmallFont"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="2017-07-16" />
+                android:text="0000-00-00"
+                android:textColor="@color/gray" />
         </LinearLayout>
     </LinearLayout>
 </LinearLayout>

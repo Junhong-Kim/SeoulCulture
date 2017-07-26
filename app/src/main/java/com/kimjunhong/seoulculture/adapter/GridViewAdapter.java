@@ -17,7 +17,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.kimjunhong.seoulculture.activity.CultureEventActivity;
 import com.kimjunhong.seoulculture.R;
-import com.kimjunhong.seoulculture.item.GridCultureItem;
+import com.kimjunhong.seoulculture.item.CultureEventItem;
 
 import java.util.List;
 
@@ -27,9 +27,9 @@ import java.util.List;
 
 public class GridViewAdapter extends BaseAdapter {
     Context mContext;
-    List<GridCultureItem> items;
+    List<CultureEventItem> items;
 
-    public GridViewAdapter(Context mContext, List<GridCultureItem> items) {
+    public GridViewAdapter(Context mContext, List<CultureEventItem> items) {
         this.mContext = mContext;
         this.items = items;
     }
@@ -52,28 +52,28 @@ public class GridViewAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup viewGroup) {
         final ViewHolder holder;
-        final GridCultureItem item = items.get(position);
+        final CultureEventItem item = items.get(position);
 
         if(convertView == null) {
-            convertView = LayoutInflater.from(mContext).inflate(R.layout.item_grid_culture, null);
+            convertView = LayoutInflater.from(mContext).inflate(R.layout.item_culture_event, null);
 
             holder = new ViewHolder();
-            holder.layout = (LinearLayout) convertView.findViewById(R.id.gridView_item_layout);
-            holder.mainImage = (ImageView) convertView.findViewById(R.id.gridView_item_mainImage);
-            holder.isFree = (TextView) convertView.findViewById(R.id.gridView_item_isFree);
-            holder.codeName = (TextView) convertView.findViewById(R.id.gridView_item_codeName);
-            holder.title = (TextView) convertView.findViewById(R.id.gridView_item_title);
-            holder.gCode = (TextView) convertView.findViewById(R.id.gridView_item_gCode);
-            holder.place = (TextView) convertView.findViewById(R.id.gridView_item_place);
-            holder.strtDate = (TextView) convertView.findViewById(R.id.gridView_item_strtDate);
-            holder.endDate = (TextView) convertView.findViewById(R.id.gridView_item_endDate);
-            holder.bookmark = (ImageView) convertView.findViewById(R.id.gridView_item_bookmark);
+            holder.layout = (LinearLayout) convertView.findViewById(R.id.cultureEvent_item_layout);
+            holder.mainImage = (ImageView) convertView.findViewById(R.id.cultureEvent_item_mainImage);
+            holder.isFree = (TextView) convertView.findViewById(R.id.cultureEvent_item_isFree);
+            holder.codeName = (TextView) convertView.findViewById(R.id.cultureEvent_item_codeName);
+            holder.title = (TextView) convertView.findViewById(R.id.cultureEvent_item_title);
+            holder.gCode = (TextView) convertView.findViewById(R.id.cultureEvent_item_gCode);
+            holder.place = (TextView) convertView.findViewById(R.id.cultureEvent_item_place);
+            holder.strtDate = (TextView) convertView.findViewById(R.id.cultureEvent_item_strtDate);
+            holder.endDate = (TextView) convertView.findViewById(R.id.cultureEvent_item_endDate);
+            holder.bookmark = (ImageView) convertView.findViewById(R.id.cultureEvent_item_bookmark);
 
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
-
+        // 레이아웃
         holder.layout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -83,7 +83,7 @@ public class GridViewAdapter extends BaseAdapter {
                 mContext.startActivity(intent);
             }
         });
-        // 대표이미지
+        // 대표 이미지
         Glide.with(mContext)
              .load(item.getMainImage().toLowerCase())
              .asBitmap()
@@ -95,7 +95,7 @@ public class GridViewAdapter extends BaseAdapter {
         } else {
             holder.title.setText(Html.fromHtml(item.getTitle()).toString());
         }
-        // 무료구분
+        // 무료 구분
         if(item.getIsFree().equals("1")) {
             holder.isFree.setText("무료");
             holder.isFree.setBackgroundColor(ContextCompat.getColor(mContext, R.color.positive));
@@ -107,14 +107,18 @@ public class GridViewAdapter extends BaseAdapter {
         holder.bookmark.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(mContext, "Clicked", Toast.LENGTH_SHORT).show();
+                Toast.makeText(mContext, "Bookmark", Toast.LENGTH_SHORT).show();
             }
         });
-
+        // 장르 이름
         holder.codeName.setText(item.getCodeName());
+        // 자치구
         holder.gCode.setText(item.getgCode());
+        // 주소
         holder.place.setText(item.getPlace());
+        // 시작일
         holder.strtDate.setText(item.getStrtDate());
+        // 종료일
         holder.endDate.setText(item.getEndDate());
 
         return convertView;

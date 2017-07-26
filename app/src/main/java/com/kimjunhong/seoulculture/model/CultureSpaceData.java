@@ -3,20 +3,20 @@ package com.kimjunhong.seoulculture.model;
 import java.util.ArrayList;
 
 /**
- * Created by INMA on 2017. 7. 16..
+ * Created by INMA on 2017. 7. 25..
  */
 
-public class Data {
-    private SearchConcertDetailService SearchConcertDetailService;
+public class CultureSpaceData {
+    SearchCulturalFacilitiesDetailService SearchCulturalFacilitiesDetailService;
 
-    public Data.SearchConcertDetailService getSearchConcertDetailService() {
-        return SearchConcertDetailService;
+    public SearchCulturalFacilitiesDetailService getSearchCulturalFacilitiesDetailService() {
+        return SearchCulturalFacilitiesDetailService;
     }
 
-    public class SearchConcertDetailService {
+    public class SearchCulturalFacilitiesDetailService {
         private int list_total_count;
         private Result RESULT;
-        private ArrayList<Culture> row;
+        private ArrayList<CultureSpace> row;
 
         public int getList_total_count() {
             return list_total_count;
@@ -26,7 +26,7 @@ public class Data {
             return RESULT;
         }
 
-        public ArrayList<Culture> getRow() {
+        public ArrayList<CultureSpace> getRow() {
             return row;
         }
 

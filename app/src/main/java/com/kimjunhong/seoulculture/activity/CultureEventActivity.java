@@ -12,7 +12,6 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -21,10 +20,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.kimjunhong.seoulculture.CultureService;
+import com.kimjunhong.seoulculture.CultureEventService;
 import com.kimjunhong.seoulculture.R;
-import com.kimjunhong.seoulculture.model.Culture;
-import com.kimjunhong.seoulculture.model.Data;
+import com.kimjunhong.seoulculture.model.CultureEvent;
+import com.kimjunhong.seoulculture.model.CultureEventData;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -96,27 +95,27 @@ public class CultureEventActivity extends AppCompatActivity {
     private void initView() {
         int id = getIntent().getIntExtra("id", 0);
 
-        CultureService service = CultureService.retrofit.create(CultureService.class);
-        Call<Data> call = service.getCulture(1, 1, id);
-        call.enqueue(new Callback<Data>() {
+        CultureEventService service = CultureEventService.retrofit.create(CultureEventService.class);
+        Call<CultureEventData> call = service.getCultureEvent(1, 1, id);
+        call.enqueue(new Callback<CultureEventData>() {
             @Override
-            public void onResponse(Call<Data> call, Response<Data> response) {
-                final Culture culture = response.body().getSearchConcertDetailService().getRow().get(0);
+            public void onResponse(Call<CultureEventData> call, Response<CultureEventData> response) {
+                final CultureEvent cultureEvent = response.body().getSearchConcertDetailService().getRow().get(0);
 
                 // 대표 이미지
                 Glide.with(getApplicationContext())
-                     .load(culture.getMAIN_IMG().toLowerCase())
+                     .load(cultureEvent.getMAIN_IMG().toLowerCase())
                      .asBitmap()
                      .placeholder(R.drawable.ic_seoul_symbol)
                      .into(mainImage);
                 // 제목
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                    title.setText(Html.fromHtml(culture.getTITLE(), Html.FROM_HTML_MODE_LEGACY).toString());
+                    title.setText(Html.fromHtml(cultureEvent.getTITLE(), Html.FROM_HTML_MODE_LEGACY).toString());
                 } else {
-                    title.setText(Html.fromHtml(culture.getTITLE()).toString());
+                    title.setText(Html.fromHtml(cultureEvent.getTITLE()).toString());
                 }
-                // 무료구분
-                if(culture.getIS_FREE().equals("1")) {
+                // 무료 구분
+                if(cultureEvent.getIS_FREE().equals("1")) {
                     isFree.setText("무료");
                     isFree.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.positive));
                 } else {
@@ -124,22 +123,22 @@ public class CultureEventActivity extends AppCompatActivity {
                     isFree.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.negative));
                 }
                 // 내용
-                if(culture.getCONTENTS().equals("")) {
+                if(cultureEvent.getCONTENTS().equals("")) {
                     contents.setVisibility(View.INVISIBLE);
                 } else {
                     contents.setVisibility(View.VISIBLE);
 
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                        contents.setText(Html.fromHtml(culture.getCONTENTS(), Html.FROM_HTML_MODE_LEGACY).toString());
+                        contents.setText(Html.fromHtml(cultureEvent.getCONTENTS(), Html.FROM_HTML_MODE_LEGACY).toString());
                     } else {
-                        contents.setText(Html.fromHtml(culture.getCONTENTS()).toString());
+                        contents.setText(Html.fromHtml(cultureEvent.getCONTENTS()).toString());
                     }
                 }
                 // 문의
                 inquiry.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel: " + culture.getINQUIRY()));
+                        Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel: " + cultureEvent.getINQUIRY()));
                         startActivity(intent);
                     }
                 });
@@ -148,7 +147,7 @@ public class CultureEventActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View view) {
                         ClipboardManager clipboardManager = (ClipboardManager)getSystemService(CLIPBOARD_SERVICE);
-                        ClipData clipData = ClipData.newPlainText("address", culture.getPLACE());
+                        ClipData clipData = ClipData.newPlainText("address", cultureEvent.getPLACE());
                         clipboardManager.setPrimaryClip(clipData);
 
                         Toast.makeText(getApplicationContext(), "주소를 복사했습니다", Toast.LENGTH_SHORT).show();
@@ -158,24 +157,22 @@ public class CultureEventActivity extends AppCompatActivity {
                 orgLink.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(culture.getORG_LINK()));
+                        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(cultureEvent.getORG_LINK()));
                         startActivity(intent);
                     }
                 });
                 // 날짜
                 try {
                     Date today = new Date();
-                    Date end = dateFormat.parse(culture.getEND_DATE());
+                    Date end = dateFormat.parse(cultureEvent.getEND_DATE());
 
                     long diff = end.getTime() - today.getTime();
                     long diffDays = diff / (24 * 60 * 60 * 1000);
 
                     if(diff < 0) {
                         remainDate.setText("오늘 종료");
-                        Log.v("log", "날짜 차이 : " + diffDays + ", " + diff);
                     } else {
                         remainDate.setText((diffDays + 1) + "일 남음");
-                        Log.v("log", "날짜 차이 : " + (diffDays + 1) + ", " + diff);
                     }
                 } catch (ParseException e) {
                     e.printStackTrace();
@@ -187,16 +184,20 @@ public class CultureEventActivity extends AppCompatActivity {
                         Toast.makeText(getApplicationContext(), "Clicked", Toast.LENGTH_SHORT).show();
                     }
                 });
-
-                codeName.setText(culture.getCODENAME());
-                startDate.setText(culture.getSTRTDATE());
-                endDate.setText(culture.getEND_DATE());
-                place.setText(culture.getPLACE());
-                gCode.setText(culture.getGCODE());
+                // 장르 이름
+                codeName.setText(cultureEvent.getCODENAME());
+                // 자치구
+                gCode.setText(cultureEvent.getGCODE());
+                // 주소
+                place.setText(cultureEvent.getPLACE());
+                // 시작일
+                startDate.setText(cultureEvent.getSTRTDATE());
+                // 종료일
+                endDate.setText(cultureEvent.getEND_DATE());
             }
 
             @Override
-            public void onFailure(Call<Data> call, Throwable t) {
+            public void onFailure(Call<CultureEventData> call, Throwable t) {
 
             }
         });

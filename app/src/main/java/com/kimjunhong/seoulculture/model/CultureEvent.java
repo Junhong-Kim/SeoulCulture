@@ -4,7 +4,7 @@ package com.kimjunhong.seoulculture.model;
  * Created by INMA on 2017. 7. 16..
  */
 
-public class Culture {
+public class CultureEvent {
     int CULTCODE;
     int SUBJCODE;
     String CODENAME;
