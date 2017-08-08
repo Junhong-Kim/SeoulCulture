@@ -3,39 +3,27 @@ package com.kimjunhong.seoulculture.fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AbsListView;
-import android.widget.GridView;
+import android.widget.TextView;
 
-import com.kimjunhong.seoulculture.CultureEventService;
 import com.kimjunhong.seoulculture.R;
-import com.kimjunhong.seoulculture.adapter.GridViewAdapter;
-import com.kimjunhong.seoulculture.item.CultureEventItem;
-import com.kimjunhong.seoulculture.model.CultureEvent;
-import com.kimjunhong.seoulculture.model.CultureEventData;
-
-import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 /**
  * Created by INMA on 2017. 7. 24..
  */
 
 public class CultureEventFragment extends Fragment {
-    @BindView(R.id.gridView) GridView gridView;
-
-    ArrayList<CultureEventItem> allItems = new ArrayList<>();
-    private GridViewAdapter mAdapter;
-    private boolean flag = false;
-    private int startIndex = 1;
-    private int endIndex = 6;
+    @BindView(R.id.btn_cultureEvent_with_date) TextView date;
+    @BindView(R.id.btn_cultureEvent_with_genre) TextView genre;
 
     @Nullable
     @Override
@@ -43,73 +31,56 @@ public class CultureEventFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_culture_event, container, false);
         ButterKnife.bind(this, view);
 
-        getCultureEvents(startIndex, endIndex);
+        setHasOptionsMenu(true);
+        initView();
         return view;
     }
 
-    private void getCultureEvents(final int startIndex, int endIndex) {
-        CultureEventService service = CultureEventService.retrofit.create(CultureEventService.class);
-        Call<CultureEventData> call = service.getCultureEvents(startIndex, endIndex);
-        call.enqueue(new Callback<CultureEventData>() {
-            @Override
-            public void onResponse(Call<CultureEventData> call, Response<CultureEventData> response) {
-                ArrayList<CultureEventItem> items = new ArrayList<>();
-                int itemSize = response.body().getSearchConcertDetailService().getRow().size();
-                ArrayList<CultureEvent> row = response.body().getSearchConcertDetailService().getRow();
-
-                CultureEventItem[] item = new CultureEventItem[itemSize];
-
-                for(int i = 0; i < itemSize; i++) {
-                    item[i] = new CultureEventItem(row.get(i).getCULTCODE(),
-                                                   row.get(i).getMAIN_IMG(),
-                                                   row.get(i).getIS_FREE(),
-                                                   row.get(i).getCODENAME(),
-                                                   row.get(i).getTITLE(),
-                                                   row.get(i).getGCODE(),
-                                                   row.get(i).getPLACE(),
-                                                   row.get(i).getSTRTDATE(),
-                                                   row.get(i).getEND_DATE());
-                    items.add(item[i]);
-                }
-                allItems.addAll(items);
-
-                if(startIndex == 1) {
-                    initGridView(allItems);
-                } else {
-                    mAdapter.notifyDataSetChanged();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<CultureEventData> call, Throwable t) {
-
-            }
-        });
+    @Override
+    public void onResume() {
+        super.onResume();
+        getActivity().invalidateOptionsMenu();
     }
 
-    private void initGridView(ArrayList<CultureEventItem> items) {
-        mAdapter = new GridViewAdapter(getActivity(), items);
-        gridView.setAdapter(mAdapter);
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.search_culture_event, menu);
+    }
 
-        gridView.setOnScrollListener(new AbsListView.OnScrollListener() {
+    private void initView() {
+        date.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.colorAccent));
+        date.setTextColor(ContextCompat.getColor(getActivity(), R.color.white));
+        genre.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.white));
+        genre.setTextColor(ContextCompat.getColor(getActivity(), R.color.black));
+
+        getFragmentManager().beginTransaction().add(R.id.cultureEvent_container, new CultureEventWithDateFragment()).commit();
+
+        date.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onScrollStateChanged(AbsListView absListView, int scrollState) {
-                if(scrollState == AbsListView.OnScrollListener.SCROLL_STATE_IDLE && flag) {
-                    startIndex = startIndex + 6;
-                    endIndex = endIndex + 6;
-                    getCultureEvents(startIndex, endIndex);
+            public void onClick(View view) {
+                date.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.colorAccent));
+                date.setTextColor(ContextCompat.getColor(getActivity(), R.color.white));
+                genre.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.white));
+                genre.setTextColor(ContextCompat.getColor(getActivity(), R.color.black));
 
-                    try {
-                        Thread.sleep(500);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }
+                FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+                fragmentTransaction.replace(R.id.cultureEvent_container, new CultureEventWithDateFragment());
+                fragmentTransaction.commit();
             }
+        });
 
+        genre.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onScroll(AbsListView absListView, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-                flag = (totalItemCount > 0) && (firstVisibleItem + visibleItemCount) >= totalItemCount;
+            public void onClick(View view) {
+                date.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.white));
+                date.setTextColor(ContextCompat.getColor(getActivity(), R.color.black));
+                genre.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.colorAccent));
+                genre.setTextColor(ContextCompat.getColor(getActivity(), R.color.white));
+
+                FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+                fragmentTransaction.replace(R.id.cultureEvent_container, new CultureEventWithGenreFragment());
+                fragmentTransaction.commit();
             }
         });
     }

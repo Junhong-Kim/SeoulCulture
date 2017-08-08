@@ -3,8 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/menu_search"
+        android:id="@+id/menu_search_culture_event"
         android:icon="@drawable/ic_search"
-        android:title="검색"
+        android:title="행사 검색"
         app:showAsAction="always" />
 </menu>

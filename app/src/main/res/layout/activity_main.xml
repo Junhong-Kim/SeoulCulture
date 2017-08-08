@@ -26,15 +26,15 @@
                 android:layout_height="match_parent"
                 android:orientation="vertical">
 
-                <android.support.v4.view.ViewPager
-                    android:id="@+id/viewPager"
+                <FrameLayout
+                    android:id="@+id/fragment_container"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1" />
 
                 <View
                     android:layout_width="match_parent"
-                    android:layout_height="2dp"
+                    android:layout_height="1dp"
                     android:background="@color/sub" />
 
                 <android.support.design.widget.BottomNavigationView
@@ -47,14 +47,5 @@
                     app:menu="@menu/culture" />
             </LinearLayout>
         </android.support.design.widget.CoordinatorLayout>
-
-        <ImageView
-            android:id="@+id/menu_culture_bookmark"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
-            android:layout_marginBottom="8dp"
-            android:src="@drawable/ic_culture_bookmark" />
     </RelativeLayout>
 </LinearLayout>

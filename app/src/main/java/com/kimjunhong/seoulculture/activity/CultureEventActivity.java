@@ -41,20 +41,20 @@ import retrofit2.Response;
 
 public class CultureEventActivity extends AppCompatActivity {
     @BindView(R.id.toolbar) Toolbar toolbar;
-    @BindView(R.id.culture_event_main_img) ImageView mainImage;
-    @BindView(R.id.culture_event_code_name) TextView codeName;
-    @BindView(R.id.culture_event_title) TextView title;
-    @BindView(R.id.culture_event_start_date) TextView startDate;
-    @BindView(R.id.culture_event_end_date) TextView endDate;
-    @BindView(R.id.culture_event_remain_date) TextView remainDate;
-    @BindView(R.id.culture_event_place) TextView place;
-    @BindView(R.id.culture_event_place_copy) LinearLayout copy;
-    @BindView(R.id.culture_event_org_link) LinearLayout orgLink;
-    @BindView(R.id.culture_event_inquiry) LinearLayout inquiry;
-    @BindView(R.id.culture_event_is_free) TextView isFree;
-    @BindView(R.id.culture_event_contents) TextView contents;
-    @BindView(R.id.culture_event_gcode) TextView gCode;
-    @BindView(R.id.culture_event_bookmark) ImageView bookmark;
+    @BindView(R.id.cultureEvent_main_img) ImageView mainImage;
+    @BindView(R.id.cultureEvent_code_name) TextView codeName;
+    @BindView(R.id.cultureEvent_title) TextView title;
+    @BindView(R.id.cultureEvent_start_date) TextView startDate;
+    @BindView(R.id.cultureEvent_end_date) TextView endDate;
+    @BindView(R.id.cultureEvent_remain_date) TextView remainDate;
+    @BindView(R.id.cultureEvent_place) TextView place;
+    @BindView(R.id.cultureEvent_place_copy) LinearLayout copy;
+    @BindView(R.id.cultureEvent_org_link) LinearLayout orgLink;
+    @BindView(R.id.cultureEvent_inquiry) LinearLayout inquiry;
+    @BindView(R.id.cultureEvent_is_free) TextView isFree;
+    @BindView(R.id.cultureEvent_contents) TextView contents;
+    @BindView(R.id.cultureEvent_gcode) TextView gCode;
+    @BindView(R.id.cultureEvent_bookmark) ImageView bookmark;
 
     private SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 

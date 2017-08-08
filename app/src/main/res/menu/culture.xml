@@ -9,7 +9,12 @@
         android:title="문화행사"
         app:showAsAction="ifRoom" />
 
-    <item android:title="@null" />
+    <item
+        android:id="@+id/menu_culture_bookmark"
+        android:enabled="true"
+        android:icon="@drawable/ic_culture_bookmark"
+        android:title="가볼래요"
+        app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/menu_culture_space"

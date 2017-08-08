@@ -39,7 +39,7 @@ import retrofit2.Response;
 public class CultureSpaceFragment extends Fragment {
     @BindView(R.id.cultureSpace_find_maps_text) TextView findMapsText;
     @BindView(R.id.cultureSpace_find_maps_layout) LinearLayout findMapsLayout;
-    @BindView(R.id.recyclerView) RecyclerView recyclerView;
+    @BindView(R.id.recyclerView_cultureSpace) RecyclerView recyclerView;
 
     ArrayList<CultureSpaceItem> allItems = new ArrayList<>();
     private RecyclerViewAdapter mAdapter;
@@ -52,9 +52,16 @@ public class CultureSpaceFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_culture_space, container, false);
         ButterKnife.bind(this, view);
 
+        setHasOptionsMenu(true);
         initView();
         getCultureSpaces(startIndex, endIndex);
         return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        getActivity().invalidateOptionsMenu();
     }
 
     private void getCultureSpaces(final int startIndex, int endIndex) {
@@ -137,7 +144,7 @@ public class CultureSpaceFragment extends Fragment {
     private SpannableString spannableString() {
         SpannableString string = new SpannableString(findMapsText.getText());
         string.setSpan(new StyleSpan(Typeface.BOLD), 5, 9, 0);
-        string.setSpan(new RelativeSizeSpan(1.2f), 5, 9, 0);
+        string.setSpan(new RelativeSizeSpan(1.4f), 5, 9, 0);
 
         return string;
     }
