@@ -16,6 +16,9 @@ public interface CultureSpaceService {
     @GET("{START_INDEX}/{END_INDEX}/")
     Call<CultureSpaceData> getCultureSpaces(@Path("START_INDEX") int start, @Path("END_INDEX") int end);
 
+    @GET("{START_INDEX}/{END_INDEX}/{FAC_CODE}")
+    Call<CultureSpaceData> getCultureSpace(@Path("START_INDEX") int start, @Path("END_INDEX") int end, @Path("FAC_CODE") int code);
+
     Retrofit retrofit = new Retrofit.Builder()
                                     .baseUrl("http://openAPI.seoul.go.kr:8088/455a726a676a686b33396b4c6b6c56/json/SearchCulturalFacilitiesDetailService/")
                                     .addConverterFactory(GsonConverterFactory.create())

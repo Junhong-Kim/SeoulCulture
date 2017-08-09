@@ -1,6 +1,7 @@
 package com.kimjunhong.seoulculture.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -13,6 +14,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.kimjunhong.seoulculture.R;
+import com.kimjunhong.seoulculture.activity.CultureSpaceActivity;
 import com.kimjunhong.seoulculture.item.CultureSpaceItem;
 
 import java.util.List;
@@ -41,13 +43,16 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        CultureSpaceItem item = items.get(position);
+        final CultureSpaceItem item = items.get(position);
 
         // 레이아웃
         holder.layout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(mContext, "Clicked", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(mContext, CultureSpaceActivity.class);
+                intent.putExtra("id", item.getFacCode());
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                mContext.startActivity(intent);
             }
         });
         // 북마크

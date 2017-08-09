@@ -9,7 +9,7 @@
     <color name="black">#000</color>
     <color name="gray">#9E9E9E</color>
     <color name="blue">#00f</color>
-    <color name="transparent">#4d000000</color>
+    <color name="transparent">#CCFFFFFF</color>
     <color name="positive">#4caf50</color>
     <color name="negative">#f44336</color>
 </resources>
