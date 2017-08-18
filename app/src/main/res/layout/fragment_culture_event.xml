@@ -30,6 +30,11 @@
             android:textStyle="bold" />
     </LinearLayout>
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="@color/colorAccent" />
+
     <FrameLayout
         android:id="@+id/cultureEvent_container"
         android:layout_width="match_parent"

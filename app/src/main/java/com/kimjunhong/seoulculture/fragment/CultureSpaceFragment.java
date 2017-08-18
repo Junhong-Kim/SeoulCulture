@@ -1,5 +1,7 @@
 package com.kimjunhong.seoulculture.fragment;
 
+import android.content.Context;
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -7,17 +9,19 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.SpannableString;
-import android.text.style.RelativeSizeSpan;
+import android.text.style.AbsoluteSizeSpan;
 import android.text.style.StyleSpan;
+import android.util.DisplayMetrics;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.kimjunhong.seoulculture.CultureSpaceService;
 import com.kimjunhong.seoulculture.R;
+import com.kimjunhong.seoulculture.activity.MarkerClusteringActivity;
 import com.kimjunhong.seoulculture.adapter.RecyclerViewAdapter;
 import com.kimjunhong.seoulculture.item.CultureSpaceItem;
 import com.kimjunhong.seoulculture.model.CultureSpace;
@@ -136,7 +140,7 @@ public class CultureSpaceFragment extends Fragment {
         findMapsLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(getActivity(), "Maps", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(getActivity(), MarkerClusteringActivity.class));
             }
         });
     }
@@ -144,8 +148,13 @@ public class CultureSpaceFragment extends Fragment {
     private SpannableString spannableString() {
         SpannableString string = new SpannableString(findMapsText.getText());
         string.setSpan(new StyleSpan(Typeface.BOLD), 5, 9, 0);
-        string.setSpan(new RelativeSizeSpan(1.4f), 5, 9, 0);
+        string.setSpan(new AbsoluteSizeSpan((int) dpToPx(getActivity(), 15)), 5, 9, 0);
 
         return string;
+    }
+
+    public float dpToPx(Context context, float dp) {
+        DisplayMetrics dm = context.getResources().getDisplayMetrics();
+        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, dm);
     }
 }

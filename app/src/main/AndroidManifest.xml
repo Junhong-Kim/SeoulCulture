@@ -26,6 +26,7 @@
         <activity android:name=".activity.CultureEventActivity" />
         <activity android:name=".activity.CultureSpaceActivity" />
         <activity android:name=".activity.MapActivity" />
+        <activity android:name=".activity.MarkerClusteringActivity" />
     </application>
 
 </manifest>

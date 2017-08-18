@@ -7,11 +7,12 @@
     <LinearLayout
         android:id="@+id/cultureSpace_find_maps_layout"
         android:layout_width="match_parent"
-        android:layout_height="30dp"
+        android:layout_height="wrap_content"
         android:background="@color/colorAccent"
         android:gravity="center"
         android:orientation="horizontal"
-        android:padding="5dp">
+        android:paddingBottom="6dp"
+        android:paddingTop="6dp">
 
         <TextView
             android:id="@+id/cultureSpace_find_maps_text"
