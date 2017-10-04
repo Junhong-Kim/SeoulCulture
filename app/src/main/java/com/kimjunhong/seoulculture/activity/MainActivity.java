@@ -1,6 +1,7 @@
 package com.kimjunhong.seoulculture.activity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -55,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_search_culture_event:
-                Toast.makeText(getApplicationContext(), "행사 검색", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(this, CultureEventSearchActivity.class));
                 return true;
         }
 

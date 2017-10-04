@@ -146,12 +146,12 @@ public class CultureSpaceActivity extends AppCompatActivity implements OnMapRead
                      .placeholder(R.drawable.ic_seoul_symbol)
                      .into(mainImg);
                 // 무료 구분
-                if(cultureSpace.getENTR_FEE().equals("1")) {
-                    isFree.setText("무료");
-                    isFree.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.positive));
-                } else {
+                if(cultureSpace.getENTRFREE().equals("1")) {
                     isFree.setText("유료");
                     isFree.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.negative));
+                } else {
+                    isFree.setText("무료");
+                    isFree.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.positive));
                 }
                 // 장르명
                 codeName.setText(cultureSpace.getCODENAME());

@@ -8,30 +8,30 @@ import com.google.maps.android.clustering.ClusterItem;
  */
 
 public class CultureSpaceMarkerItem implements ClusterItem {
-    private String name;
-    private String address;
+    private String facCode;
+    private String facName;
     private LatLng latLng;
 
-    public CultureSpaceMarkerItem(String name, String address, LatLng latLng) {
-        this.name = name;
-        this.address = address;
+    public CultureSpaceMarkerItem(String facCode, String facName, LatLng latLng) {
+        this.facCode = facCode;
+        this.facName = facName;
         this.latLng = latLng;
     }
 
-    public String getName() {
-        return name;
+    public String getFacCode() {
+        return facCode;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setFacCode(String facCode) {
+        this.facCode = facCode;
     }
 
-    public String getAddress() {
-        return address;
+    public String getFacName() {
+        return facName;
     }
 
-    public void setAddress(String address) {
-        this.address = address;
+    public void setFacName(String facName) {
+        this.facName = facName;
     }
 
     public LatLng getLatLng() {

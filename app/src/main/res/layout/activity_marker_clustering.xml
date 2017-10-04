@@ -6,9 +6,114 @@
 
     <include layout="@layout/view_toolbar" />
 
-    <fragment
-        android:id="@+id/marker_clustering_map"
-        class="com.google.android.gms.maps.MapFragment"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent">
+
+        <fragment
+            android:id="@+id/marker_clustering_map"
+            class="com.google.android.gms.maps.MapFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <FrameLayout
+            android:id="@+id/marker_fac_info_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_margin="10dp"
+            android:visibility="invisible">
+
+            <LinearLayout
+                android:id="@+id/marker_cultureSpace_item_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@color/white"
+                android:orientation="horizontal">
+
+                <RelativeLayout
+                    android:layout_width="150dp"
+                    android:layout_height="120dp">
+
+                    <ImageView
+                        android:id="@+id/marker_cultureSpace_item_mainImage"
+                        android:layout_width="match_parent"
+                        android:layout_height="200dp"
+                        android:gravity="center"
+                        android:src="@drawable/ic_seoul_symbol" />
+
+                    <TextView
+                        android:id="@+id/marker_cultureSpace_item_isFree"
+                        style="@style/SmallFont"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:background="@color/positive"
+                        android:padding="5dp"
+                        android:text="구분"
+                        android:textColor="@color/white" />
+                </RelativeLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:padding="5dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/marker_cultureSpace_item_codeName"
+                            style="@style/MediumFont"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="장르분류명"
+                            android:textStyle="bold" />
+
+                        <ImageView
+                            android:id="@+id/marker_cultureSpace_item_bookmark"
+                            android:layout_width="18dp"
+                            android:layout_height="18dp"
+                            android:layout_marginLeft="2dp"
+                            android:src="@drawable/ic_heart" />
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/marker_cultureSpace_item_facName"
+                        style="@style/MediumFont"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:ellipsize="end"
+                        android:maxLines="1"
+                        android:text="문화공간명"
+                        android:textColor="@color/colorPrimary"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/marker_cultureSpace_item_addr"
+                        style="@style/SmallFont"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:ellipsize="end"
+                        android:maxLines="1"
+                        android:text="주소" />
+
+                    <TextView
+                        android:id="@+id/marker_cultureSpace_item_etcDesc"
+                        style="@style/SmallFont"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:ellipsize="end"
+                        android:maxLines="4"
+                        android:text="정보"
+                        android:textColor="@color/gray" />
+                </LinearLayout>
+            </LinearLayout>
+        </FrameLayout>
+    </RelativeLayout>
 </LinearLayout>
