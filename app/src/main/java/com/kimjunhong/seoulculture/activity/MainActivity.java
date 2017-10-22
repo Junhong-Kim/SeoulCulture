@@ -10,11 +10,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.widget.FrameLayout;
-import android.widget.Toast;
 
 import com.kimjunhong.seoulculture.R;
 import com.kimjunhong.seoulculture.fragment.CultureEventFragment;
 import com.kimjunhong.seoulculture.fragment.CultureSpaceFragment;
+import com.kimjunhong.seoulculture.fragment.MyCultureFragment;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -74,17 +74,21 @@ public class MainActivity extends AppCompatActivity {
                 FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
 
                 switch (item.getItemId()) {
+                    // 문화행사
                     case R.id.menu_culture_event:
                         fragmentTransaction.replace(R.id.fragment_container, new CultureEventFragment());
                         fragmentTransaction.commit();
                         return true;
 
-                    case R.id.menu_culture_bookmark:
-                        Toast.makeText(getApplicationContext(), "Bookmark", Toast.LENGTH_SHORT).show();
-                        return true;
-
+                    // 문화공간
                     case R.id.menu_culture_space:
                         fragmentTransaction.replace(R.id.fragment_container, new CultureSpaceFragment());
+                        fragmentTransaction.commit();
+                        return true;
+
+                    // MY문화
+                    case R.id.menu_my_culture:
+                        fragmentTransaction.replace(R.id.fragment_container, new MyCultureFragment());
                         fragmentTransaction.commit();
                         return true;
 

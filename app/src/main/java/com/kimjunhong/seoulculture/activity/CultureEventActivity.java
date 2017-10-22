@@ -41,6 +41,7 @@ import retrofit2.Response;
 
 public class CultureEventActivity extends AppCompatActivity {
     @BindView(R.id.toolbar) Toolbar toolbar;
+    @BindView(R.id.toolbar_title) TextView toolbarTitle;
     @BindView(R.id.cultureEvent_main_img) ImageView mainImage;
     @BindView(R.id.cultureEvent_code_name) TextView codeName;
     @BindView(R.id.cultureEvent_title) TextView title;
@@ -90,6 +91,8 @@ public class CultureEventActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
+
+        toolbarTitle.setText("문화행사");
     }
 
     private void initView() {

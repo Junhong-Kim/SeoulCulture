@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="100dp"
+            android:layout_gravity="center"
+            android:layout_margin="10dp"
+            android:padding="20dp"
+            android:src="@drawable/ic_seoul_brand" />
+
+        <LinearLayout
+            android:id="@+id/my_culture_bookmark"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="@drawable/bg_sub_stroke"
+            android:gravity="center"
+            android:padding="10dp">
+
+            <ImageView
+                style="@style/MyCultureIcon"
+                android:src="@drawable/ic_bookmark" />
+
+            <TextView
+                style="@style/MediumFont"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="문화 북마크" />
+
+            <TextView
+                android:id="@+id/my_culture_bookmark_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0"
+                android:textColor="@color/colorPrimary"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="건" />
+
+            <ImageView
+                style="@style/MyCultureIcon"
+                android:src="@drawable/ic_right_arrow" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/my_culture_license"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/bg_sub_stroke"
+            android:gravity="center"
+            android:padding="10dp">
+
+            <ImageView
+                style="@style/MyCultureIcon"
+                android:src="@drawable/ic_license" />
+
+            <TextView
+                style="@style/MediumFont"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="아이콘 라이선스" />
+
+            <ImageView
+                style="@style/MyCultureIcon"
+                android:src="@drawable/ic_right_arrow" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:orientation="vertical">
+
+            <View
+                android:layout_width="wrap_content"
+                android:layout_height="1dp"
+                android:background="@color/sub" />
+
+            <LinearLayout
+                android:id="@+id/my_culture_review"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="@color/white"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:padding="10dp">
+
+                <ImageView
+                    style="@style/MyCultureIcon"
+                    android:src="@drawable/ic_review" />
+
+                <TextView
+                    style="@style/MediumFont"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="리뷰작성" />
+
+                <ImageView
+                    style="@style/MyCultureIcon"
+                    android:src="@drawable/ic_right_arrow" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="wrap_content"
+                android:layout_height="1dp"
+                android:layout_marginLeft="10dp"
+                android:background="@color/sub" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="@color/white"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:padding="10dp">
+
+                <ImageView
+                    style="@style/MyCultureIcon"
+                    android:src="@drawable/ic_info_circle" />
+
+                <TextView
+                    style="@style/MediumFont"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="버전정보" />
+
+                <TextView
+                    android:id="@+id/my_culture_version"
+                    style="@style/MediumFont"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="5dp"
+                    android:text="0.0.0"
+                    android:textColor="@color/colorPrimary" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="wrap_content"
+                android:layout_height="1dp"
+                android:background="@color/sub" />
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

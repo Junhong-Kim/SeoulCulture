@@ -16,11 +16,13 @@ import com.bumptech.glide.Glide;
 import com.kimjunhong.seoulculture.R;
 import com.kimjunhong.seoulculture.activity.CultureSpaceActivity;
 import com.kimjunhong.seoulculture.item.CultureSpaceItem;
+import com.kimjunhong.seoulculture.model.CultureSpaceBookmark;
 
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.realm.Realm;
 
 /**
  * Created by INMA on 2017. 7. 25..
@@ -29,6 +31,7 @@ import butterknife.ButterKnife;
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> {
     Context mContext;
     List<CultureSpaceItem> items;
+    Realm realm;
 
     public RecyclerViewAdapter(Context mContext, List<CultureSpaceItem> items) {
         this.mContext = mContext;
@@ -59,7 +62,31 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         holder.bookmark.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(mContext, "Bookmark", Toast.LENGTH_SHORT).show();
+                realm = Realm.getDefaultInstance();
+                try {
+                    // 북마크 추가
+                    realm.executeTransaction(new Realm.Transaction() {
+                        @Override
+                        public void execute(Realm realm) {
+                            CultureSpaceBookmark bookmark = new CultureSpaceBookmark();
+                            bookmark.setSpaceId(Integer.parseInt(item.getFacCode()));
+
+                            CultureSpaceBookmark.create(realm, bookmark);
+                            Toast.makeText(mContext, "북마크에 추가되었습니다", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                } catch (Exception e) {
+                    // 북마크 삭제
+                    realm.executeTransaction(new Realm.Transaction() {
+                        @Override
+                        public void execute(Realm realm) {
+                            CultureSpaceBookmark.delete(realm, Integer.parseInt(item.getFacCode()));
+                            Toast.makeText(mContext, "북마크가 삭제되었습니다", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                } finally {
+                    realm.close();
+                }
             }
         });
         // 무료 구분

@@ -15,11 +15,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.kimjunhong.seoulculture.activity.CultureEventActivity;
 import com.kimjunhong.seoulculture.R;
+import com.kimjunhong.seoulculture.activity.CultureEventActivity;
 import com.kimjunhong.seoulculture.item.CultureEventItem;
+import com.kimjunhong.seoulculture.model.CultureEventBookmark;
 
 import java.util.List;
+
+import io.realm.Realm;
 
 /**
  * Created by INMA on 2017. 7. 16..
@@ -28,6 +31,7 @@ import java.util.List;
 public class GridViewAdapter extends BaseAdapter {
     Context mContext;
     List<CultureEventItem> items;
+    Realm realm;
 
     public GridViewAdapter(Context mContext, List<CultureEventItem> items) {
         this.mContext = mContext;
@@ -107,7 +111,31 @@ public class GridViewAdapter extends BaseAdapter {
         holder.bookmark.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(mContext, "Bookmark", Toast.LENGTH_SHORT).show();
+                realm = Realm.getDefaultInstance();
+                try {
+                    // 북마크 추가
+                    realm.executeTransaction(new Realm.Transaction() {
+                        @Override
+                        public void execute(Realm realm) {
+                            CultureEventBookmark bookmark = new CultureEventBookmark();
+                            bookmark.setEventId(item.getCultCode());
+
+                            CultureEventBookmark.create(realm, bookmark);
+                            Toast.makeText(mContext, "북마크에 추가되었습니다", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                } catch (Exception e) {
+                    // 북마크 삭제
+                    realm.executeTransaction(new Realm.Transaction() {
+                        @Override
+                        public void execute(Realm realm) {
+                            CultureEventBookmark.delete(realm, item.getCultCode());
+                            Toast.makeText(mContext, "북마크가 삭제되었습니다", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                } finally {
+                    realm.close();
+                }
             }
         });
         // 장르 이름

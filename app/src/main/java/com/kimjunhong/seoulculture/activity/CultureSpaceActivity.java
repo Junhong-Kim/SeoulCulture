@@ -45,6 +45,7 @@ import retrofit2.Response;
 
 public class CultureSpaceActivity extends AppCompatActivity implements OnMapReadyCallback{
     @BindView(R.id.toolbar) Toolbar toolbar;
+    @BindView(R.id.toolbar_title) TextView toolbarTitle;
     @BindView(R.id.cultureSpace_main_img) ImageView mainImg;
     @BindView(R.id.cultureSpace_is_free) TextView isFree;
     @BindView(R.id.cultureSpace_code_name) TextView codeName;
@@ -127,6 +128,8 @@ public class CultureSpaceActivity extends AppCompatActivity implements OnMapRead
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
+
+        toolbarTitle.setText("문화공간");
     }
 
     private void initView() {

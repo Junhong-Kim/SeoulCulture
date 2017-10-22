@@ -1,51 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/activity_main"
+    android:id="@+id/drawerLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context="com.kimjunhong.seoulculture.activity.MainActivity">
+    tools:context="com.kimjunhong.seoulculture.activity.MainActivity"
+    tools:openDrawer="start">
 
-    <include layout="@layout/view_toolbar" />
-
-    <RelativeLayout
+    <LinearLayout
+        android:id="@+id/activity_main"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-        <android.support.design.widget.CoordinatorLayout
+        <include layout="@layout/view_toolbar" />
+
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true">
+            android:layout_height="match_parent">
 
-            <LinearLayout
+            <android.support.design.widget.CoordinatorLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="vertical">
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true">
 
-                <FrameLayout
-                    android:id="@+id/fragment_container"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_weight="1" />
+                    android:orientation="vertical">
 
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="@color/sub" />
+                    <FrameLayout
+                        android:id="@+id/fragment_container"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1" />
 
-                <android.support.design.widget.BottomNavigationView
-                    android:id="@+id/bottomNavigation"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:itemBackground="@color/white"
-                    app:itemIconTint="@color/selector_culture_menu"
-                    app:itemTextColor="@color/selector_culture_menu"
-                    app:menu="@menu/culture" />
-            </LinearLayout>
-        </android.support.design.widget.CoordinatorLayout>
-    </RelativeLayout>
-</LinearLayout>
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/sub" />
+
+                    <android.support.design.widget.BottomNavigationView
+                        android:id="@+id/bottomNavigation"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/white"
+                        app:itemIconTint="@color/selector_culture_menu"
+                        app:itemTextColor="@color/selector_culture_menu"
+                        app:menu="@menu/bottom_navigation_view" />
+                </LinearLayout>
+            </android.support.design.widget.CoordinatorLayout>
+        </RelativeLayout>
+    </LinearLayout>
+</android.support.v4.widget.DrawerLayout>

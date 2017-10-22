@@ -40,17 +40,20 @@ import com.kimjunhong.seoulculture.CultureSpaceService;
 import com.kimjunhong.seoulculture.R;
 import com.kimjunhong.seoulculture.item.CultureSpaceMarkerItem;
 import com.kimjunhong.seoulculture.model.CultureSpace;
+import com.kimjunhong.seoulculture.model.CultureSpaceBookmark;
 import com.kimjunhong.seoulculture.model.CultureSpaceData;
 
 import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.realm.Realm;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 import static com.kimjunhong.seoulculture.R.id.marker_title;
+import static com.kimjunhong.seoulculture.activity.MainActivity.mContext;
 
 /**
  * Created by INMA on 2017. 8. 10..
@@ -75,6 +78,8 @@ public class MarkerClusteringActivity extends AppCompatActivity implements OnMap
 
     GoogleMap mMap;
     LatLng SEOUL = new LatLng(37.56, 126.97);
+
+    Realm realm;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -278,7 +283,31 @@ public class MarkerClusteringActivity extends AppCompatActivity implements OnMap
                 facBookmark.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        Toast.makeText(getApplicationContext(), "Bookmark", Toast.LENGTH_SHORT).show();
+                        realm = Realm.getDefaultInstance();
+                        try {
+                            // 북마크 추가
+                            realm.executeTransaction(new Realm.Transaction() {
+                                @Override
+                                public void execute(Realm realm) {
+                                    CultureSpaceBookmark bookmark = new CultureSpaceBookmark();
+                                    bookmark.setSpaceId(Integer.parseInt(facCode));
+
+                                    CultureSpaceBookmark.create(realm, bookmark);
+                                    Toast.makeText(mContext, "북마크에 추가되었습니다", Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                        } catch (Exception e) {
+                            // 북마크 삭제
+                            realm.executeTransaction(new Realm.Transaction() {
+                                @Override
+                                public void execute(Realm realm) {
+                                    CultureSpaceBookmark.delete(realm, Integer.parseInt(facCode));
+                                    Toast.makeText(mContext, "북마크가 삭제되었습니다", Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                        } finally {
+                            realm.close();
+                        }
                     }
                 });
                 // 공간명

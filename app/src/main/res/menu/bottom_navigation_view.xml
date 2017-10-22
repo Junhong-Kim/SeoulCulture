@@ -10,16 +10,16 @@
         app:showAsAction="ifRoom" />
 
     <item
-        android:id="@+id/menu_culture_bookmark"
-        android:enabled="true"
-        android:icon="@drawable/ic_culture_bookmark"
-        android:title="가볼래요"
-        app:showAsAction="ifRoom" />
-
-    <item
         android:id="@+id/menu_culture_space"
         android:enabled="true"
         android:icon="@drawable/ic_culture_space"
         android:title="문화공간"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/menu_my_culture"
+        android:enabled="true"
+        android:icon="@drawable/ic_my_cluture"
+        android:title="MY문화"
         app:showAsAction="ifRoom" />
 </menu>
