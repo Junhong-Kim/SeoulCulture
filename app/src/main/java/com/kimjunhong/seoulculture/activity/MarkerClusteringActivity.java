@@ -71,15 +71,15 @@ public class MarkerClusteringActivity extends AppCompatActivity implements OnMap
     @BindView(R.id.marker_cultureSpace_item_etcDesc) TextView facEtcDesc;
 
     // ClusterManager<CultureSpaceMarkerItem> clusterManager;
-    View customMarkerView;
-    Marker selectedMarker;
-    TextView markerTitle;
-    String facCode;
+    private View customMarkerView;
+    private Marker selectedMarker;
+    private TextView markerTitle;
+    private String facCode;
 
-    GoogleMap mMap;
-    LatLng SEOUL = new LatLng(37.56, 126.97);
+    private GoogleMap mMap;
+    private LatLng SEOUL = new LatLng(37.56, 126.97);
 
-    Realm realm;
+    private Realm realm;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -279,7 +279,21 @@ public class MarkerClusteringActivity extends AppCompatActivity implements OnMap
                 }
                 // 장르명
                 facCodeName.setText(cultureSpace.getCODENAME());
-                // 북마크
+                // 북마크 표시
+                try {
+                    realm = Realm.getDefaultInstance();
+                    realm.executeTransaction(new Realm.Transaction() {
+                        @Override
+                        public void execute(Realm realm) {
+                            CultureSpaceBookmark spaceBookmark = CultureSpaceBookmark.findOne(realm, Integer.parseInt(facCode));
+                            facBookmark.setImageResource(R.drawable.ic_heart_filled);
+                            Log.v("log", "bookmark : " + spaceBookmark.getSpaceId());
+                        }
+                    });
+                } catch (Exception e) {
+                    facBookmark.setImageResource(R.drawable.ic_heart);
+                }
+                // 북마크 이벤트
                 facBookmark.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -293,6 +307,7 @@ public class MarkerClusteringActivity extends AppCompatActivity implements OnMap
                                     bookmark.setSpaceId(Integer.parseInt(facCode));
 
                                     CultureSpaceBookmark.create(realm, bookmark);
+                                    facBookmark.setImageResource(R.drawable.ic_heart_filled);
                                     Toast.makeText(mContext, "북마크에 추가되었습니다", Toast.LENGTH_SHORT).show();
                                 }
                             });
@@ -302,6 +317,7 @@ public class MarkerClusteringActivity extends AppCompatActivity implements OnMap
                                 @Override
                                 public void execute(Realm realm) {
                                     CultureSpaceBookmark.delete(realm, Integer.parseInt(facCode));
+                                    facBookmark.setImageResource(R.drawable.ic_heart);
                                     Toast.makeText(mContext, "북마크가 삭제되었습니다", Toast.LENGTH_SHORT).show();
                                 }
                             });

@@ -123,7 +123,7 @@ public class CultureEventGenreAdapter extends RecyclerView.Adapter<CultureEventG
             @Override
             public void onResponse(Call<CultureEventGenreData> call, Response<CultureEventGenreData> response) {
                 CultureEventWithGenreFragment genreFragment = (CultureEventWithGenreFragment) ((MainActivity)MainActivity.mContext).getSupportFragmentManager().findFragmentById(R.id.cultureEvent_container);
-                genreFragment.initEvents(1, response.body().getSearchPerformanceBySubjectService().getList_total_count(), genre);
+                genreFragment.getCultureEvents(1, response.body().getSearchPerformanceBySubjectService().getList_total_count(), genre);
             }
 
             @Override

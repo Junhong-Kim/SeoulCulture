@@ -28,12 +28,12 @@ import io.realm.Realm;
  * Created by INMA on 2017. 7. 25..
  */
 
-public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> {
-    Context mContext;
-    List<CultureSpaceItem> items;
-    Realm realm;
+public class CultureSpaceAdapter extends RecyclerView.Adapter<CultureSpaceAdapter.ViewHolder> {
+    private Context mContext;
+    private List<CultureSpaceItem> items;
+    private Realm realm;
 
-    public RecyclerViewAdapter(Context mContext, List<CultureSpaceItem> items) {
+    public CultureSpaceAdapter(Context mContext, List<CultureSpaceItem> items) {
         this.mContext = mContext;
         this.items = items;
     }
@@ -45,7 +45,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(final ViewHolder holder, int position) {
         final CultureSpaceItem item = items.get(position);
 
         // 레이아웃
@@ -59,6 +59,12 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             }
         });
         // 북마크
+        if(item.isBookmark()) {
+            holder.bookmark.setImageResource(R.drawable.ic_heart_filled);
+        } else {
+            holder.bookmark.setImageResource(R.drawable.ic_heart);
+        }
+
         holder.bookmark.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -72,6 +78,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                             bookmark.setSpaceId(Integer.parseInt(item.getFacCode()));
 
                             CultureSpaceBookmark.create(realm, bookmark);
+                            holder.bookmark.setImageResource(R.drawable.ic_heart_filled);
+
                             Toast.makeText(mContext, "북마크에 추가되었습니다", Toast.LENGTH_SHORT).show();
                         }
                     });
@@ -81,6 +89,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                         @Override
                         public void execute(Realm realm) {
                             CultureSpaceBookmark.delete(realm, Integer.parseInt(item.getFacCode()));
+                            holder.bookmark.setImageResource(R.drawable.ic_heart);
+
                             Toast.makeText(mContext, "북마크가 삭제되었습니다", Toast.LENGTH_SHORT).show();
                         }
                     });

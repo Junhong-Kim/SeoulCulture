@@ -12,6 +12,7 @@ import android.text.SpannableString;
 import android.text.style.AbsoluteSizeSpan;
 import android.text.style.StyleSpan;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,16 +23,17 @@ import android.widget.TextView;
 import com.kimjunhong.seoulculture.CultureSpaceService;
 import com.kimjunhong.seoulculture.R;
 import com.kimjunhong.seoulculture.activity.MarkerClusteringActivity;
-import com.kimjunhong.seoulculture.adapter.RecyclerViewAdapter;
+import com.kimjunhong.seoulculture.adapter.CultureSpaceAdapter;
 import com.kimjunhong.seoulculture.item.CultureSpaceItem;
 import com.kimjunhong.seoulculture.model.CultureSpace;
+import com.kimjunhong.seoulculture.model.CultureSpaceBookmark;
 import com.kimjunhong.seoulculture.model.CultureSpaceData;
-import com.kimjunhong.seoulculture.util.RecyclerViewDecoration;
 
 import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.realm.Realm;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -45,10 +47,13 @@ public class CultureSpaceFragment extends Fragment {
     @BindView(R.id.cultureSpace_find_maps_layout) LinearLayout findMapsLayout;
     @BindView(R.id.recyclerView_cultureSpace) RecyclerView recyclerView;
 
-    ArrayList<CultureSpaceItem> allItems = new ArrayList<>();
-    private RecyclerViewAdapter mAdapter;
+    private ArrayList<CultureSpaceItem> spaceItems = new ArrayList<>();
+    private CultureSpaceAdapter mAdapter;
+
     private int startIndex = 1;
     private int endIndex = 6;
+    private boolean isBookmark = false;
+    private Realm realm;
 
     @Nullable
     @Override
@@ -76,24 +81,41 @@ public class CultureSpaceFragment extends Fragment {
             public void onResponse(Call<CultureSpaceData> call, Response<CultureSpaceData> response) {
                 ArrayList<CultureSpaceItem> items = new ArrayList<>();
                 int itemSize = response.body().getSearchCulturalFacilitiesDetailService().getRow().size();
-                ArrayList<CultureSpace> row = response.body().getSearchCulturalFacilitiesDetailService().getRow();
+                final ArrayList<CultureSpace> row = response.body().getSearchCulturalFacilitiesDetailService().getRow();
 
-                CultureSpaceItem[] item = new CultureSpaceItem[itemSize];
+                final CultureSpaceItem[] item = new CultureSpaceItem[itemSize];
 
                 for(int i = 0; i < itemSize; i++) {
-                    item[i] = new CultureSpaceItem(row.get(i).getFAC_CODE(),
-                                                   row.get(i).getCODENAME(),
-                                                   row.get(i).getFAC_NAME(),
-                                                   row.get(i).getMAIN_IMG(),
-                                                   row.get(i).getADDR(),
-                                                   row.get(i).getENTRFREE(),
-                                                   row.get(i).getETC_DESC());
-                    items.add(item[i]);
+                    try {
+                        // 북마크 표시
+                        final int pos = i;
+                        realm = Realm.getDefaultInstance();
+                        realm.executeTransaction(new Realm.Transaction() {
+                            @Override
+                            public void execute(Realm realm) {
+                                CultureSpaceBookmark spaceBookmark = CultureSpaceBookmark.findOne(realm, Integer.parseInt(row.get(pos).getFAC_CODE()));
+                                isBookmark = true;
+                                Log.v("log", "Space bookmark : " + spaceBookmark.getSpaceId());
+                            }
+                        });
+                    } catch (Exception e) {
+                        isBookmark = false;
+                    } finally {
+                        item[i] = new CultureSpaceItem(row.get(i).getFAC_CODE(),
+                                                       row.get(i).getCODENAME(),
+                                                       row.get(i).getFAC_NAME(),
+                                                       row.get(i).getMAIN_IMG(),
+                                                       row.get(i).getADDR(),
+                                                       row.get(i).getENTRFREE(),
+                                                       row.get(i).getETC_DESC(),
+                                                       isBookmark);
+                        items.add(item[i]);
+                    }
                 }
-                allItems.addAll(items);
+                spaceItems.addAll(items);
 
                 if(startIndex == 1) {
-                    initRecyclerView(allItems);
+                    initRecyclerView(spaceItems);
                 } else {
                     mAdapter.notifyDataSetChanged();
                 }
@@ -110,9 +132,8 @@ public class CultureSpaceFragment extends Fragment {
         recyclerView.setHasFixedSize(true);
         LinearLayoutManager lm = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(lm);
-        mAdapter = new RecyclerViewAdapter(getActivity(), items);
+        mAdapter = new CultureSpaceAdapter(getActivity(), items);
         recyclerView.setAdapter(mAdapter);
-        recyclerView.addItemDecoration(new RecyclerViewDecoration(25));
 
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -125,11 +146,11 @@ public class CultureSpaceFragment extends Fragment {
                     endIndex = endIndex + 6;
                     getCultureSpaces(startIndex, endIndex);
 
-                    try {
-                        Thread.sleep(500);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
+//                    try {
+//                        Thread.sleep(500);
+//                    } catch (InterruptedException e) {
+//                        e.printStackTrace();
+//                    }
                 }
             }
         });
@@ -153,7 +174,7 @@ public class CultureSpaceFragment extends Fragment {
         return string;
     }
 
-    public float dpToPx(Context context, float dp) {
+    private float dpToPx(Context context, float dp) {
         DisplayMetrics dm = context.getResources().getDisplayMetrics();
         return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, dm);
     }

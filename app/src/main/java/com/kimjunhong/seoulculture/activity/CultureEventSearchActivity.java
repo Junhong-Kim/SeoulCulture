@@ -1,10 +1,13 @@
 package com.kimjunhong.seoulculture.activity;
 
 import android.content.Context;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -15,25 +18,27 @@ import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.FrameLayout;
-import android.widget.GridView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.kimjunhong.seoulculture.CultureEventSearchWithNameService;
 import com.kimjunhong.seoulculture.CultureEventService;
 import com.kimjunhong.seoulculture.R;
-import com.kimjunhong.seoulculture.CultureEventSearchWithNameService;
-import com.kimjunhong.seoulculture.adapter.GridViewAdapter;
+import com.kimjunhong.seoulculture.adapter.CultureEventAdapter;
 import com.kimjunhong.seoulculture.item.CultureEventItem;
 import com.kimjunhong.seoulculture.model.CultureEvent;
+import com.kimjunhong.seoulculture.model.CultureEventBookmark;
 import com.kimjunhong.seoulculture.model.CultureEventData;
 import com.kimjunhong.seoulculture.model.CultureEventSearchWithName;
 import com.kimjunhong.seoulculture.model.CultureEventSearchWithNameData;
 import com.kimjunhong.seoulculture.util.ClearEditText;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.realm.Realm;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -45,11 +50,14 @@ import retrofit2.Response;
 public class CultureEventSearchActivity extends AppCompatActivity {
     @BindView(R.id.toolbar) Toolbar toolbar;
     @BindView(R.id.search_editText) ClearEditText clearEditText;
-    @BindView(R.id.gridView_cultureEvent_search) GridView gridView;
+    @BindView(R.id.gridRecyclerView_cultureEvent_search) RecyclerView recyclerView;
     @BindView(R.id.defaultLayout_cultureEvent_search) FrameLayout defaultLayout;
 
     public ArrayList<CultureEventItem> searchItems = new ArrayList<>();
-    private GridViewAdapter mAdapter;
+    private CultureEventAdapter mAdapter;
+
+    private boolean isBookmark = false;
+    private Realm realm;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -98,14 +106,14 @@ public class CultureEventSearchActivity extends AppCompatActivity {
                         final String title = String.valueOf(clearEditText.getText());
 
                         if(title.equals("")) {
-                            // 검색명이 비었을 때
+                            // 검색어가 비었을 때
                             Toast.makeText(getApplicationContext(), "문화행사 이름을 입력해주세요", Toast.LENGTH_SHORT).show();
                         } else {
                             // 이전 검색 리스트 지운 후 검색
                             searchItems.clear();
 
                             CultureEventSearchWithNameService service = CultureEventSearchWithNameService.retrofit.create(CultureEventSearchWithNameService.class);
-                            // 해당 검색명으로 몇개의 행사가 있는지 조회 후 검색
+                            // 해당 검색어로 몇개의 행사가 있는지 조회 후 검색
                             Call<CultureEventSearchWithNameData> call = service.getCultureEvents(1, 1, title);
                             call.enqueue(new Callback<CultureEventSearchWithNameData>() {
                                 @Override
@@ -143,9 +151,9 @@ public class CultureEventSearchActivity extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence charSequence, int start, int count, int after) {
-                if (clearEditText.isFocused()) // 포커스 됬을때 만 판별
+                if (clearEditText.isFocused()) { // 포커스 판별
                     clearEditText.setClearIconVisible(charSequence.length() > 0); // 비어있지 않으면 아이콘 사라지기
-
+                }
 //                if (charSequence.length() > 0) {
 //                    // 텍스트 길이가 0보다 크면 숨기기
 //                    defaultLayout.setVisibility(View.INVISIBLE);
@@ -163,52 +171,71 @@ public class CultureEventSearchActivity extends AppCompatActivity {
     }
 
     private void getCultureEvents(int startIndex, int endIndex, String title) {
+        defaultLayout.setVisibility(View.INVISIBLE);
+
         // 검색 서비스
-        CultureEventSearchWithNameService service = CultureEventSearchWithNameService.retrofit.create(CultureEventSearchWithNameService.class);
-        Call<CultureEventSearchWithNameData> call = service.getCultureEvents(startIndex, endIndex, title);
+        CultureEventSearchWithNameService searchService = CultureEventSearchWithNameService.retrofit.create(CultureEventSearchWithNameService.class);
+        Call<CultureEventSearchWithNameData> call = searchService.getCultureEvents(startIndex, endIndex, title);
         call.enqueue(new Callback<CultureEventSearchWithNameData>() {
             @Override
             public void onResponse(Call<CultureEventSearchWithNameData> call, Response<CultureEventSearchWithNameData> response) {
-                // 검색된 행사 개수
-                int size = response.body().getSearchConcertNameService().getRow().size();
-                // 검색된 행사 정보
-                ArrayList<CultureEventSearchWithName> row = response.body().getSearchConcertNameService().getRow();
+                final ArrayList<CultureEventSearchWithName> searchRow = response.body().getSearchConcertNameService().getRow();
+                final int searchSize = searchRow.size();
 
-                // 행사 상세 정보 가져오기
-                CultureEventService cultureEventService = CultureEventService.retrofit.create(CultureEventService.class);
-                // 검색된 행사 개수 만큼 반복
-                for(int i = 0; i< size; i++) {
-                    // 검색된 행사 코드
-                    Log.v("log", "id: " + row.get(i).getCULTCODE());
-
-                    final int count = i;
-                    final CultureEventItem[] item = new CultureEventItem[size];
-
-                    Call<CultureEventData> detailCall = cultureEventService.getCultureEvent(1, 1, row.get(i).getCULTCODE());
-                    detailCall.enqueue(new Callback<CultureEventData>() {
-                        @Override
-                        public void onResponse(Call<CultureEventData> call, Response<CultureEventData> response) {
-                            CultureEvent cultureEvent = response.body().getSearchConcertDetailService().getRow().get(0);
-                            item[count] = new CultureEventItem(cultureEvent.getCULTCODE(),
-                                                               cultureEvent.getMAIN_IMG(),
-                                                               cultureEvent.getIS_FREE(),
-                                                               cultureEvent.getCODENAME(),
-                                                               cultureEvent.getTITLE(),
-                                                               cultureEvent.getGCODE(),
-                                                               cultureEvent.getPLACE(),
-                                                               cultureEvent.getSTRTDATE(),
-                                                               cultureEvent.getEND_DATE());
-                            searchItems.add(item[count]);
-                            initGridViewEvents(searchItems);
+                final CultureEventService eventService = CultureEventService.retrofit.create(CultureEventService.class);
+                // 검색된 항목 동기처리
+                new AsyncTask<Void, Integer, ArrayList<CultureEventItem>>() {
+                    @Override
+                    protected ArrayList<CultureEventItem> doInBackground(Void... voids) {
+                        CultureEventItem[] eventItem = new CultureEventItem[searchSize];
+                        for (int i = 0; i < searchSize; i++) {
+                            final int pos = i;
+                            try {
+                                // 검색된 항목이 북마크 되어있는지
+                                realm = Realm.getDefaultInstance();
+                                realm.executeTransaction(new Realm.Transaction() {
+                                    @Override
+                                    public void execute(Realm realm) {
+                                        CultureEventBookmark eventBookmark = CultureEventBookmark.findOne(realm, searchRow.get(pos).getCULTCODE());
+                                        isBookmark = true;
+                                        Log.v("log", "bookmark : " + eventBookmark.getEventId());
+                                    }
+                                });
+                            } catch (Exception e) {
+                                isBookmark = false;
+                                Log.v("log", "bookmark : " + e);
+                            } finally {
+                                // 검색된 항목 상세 정보 가져오기
+                                Call<CultureEventData> eventCall = eventService.getCultureEvent(1, 1, searchRow.get(pos).getCULTCODE());
+                                try {
+                                    CultureEvent cultureEvent = eventCall.execute().body().getSearchConcertDetailService().getRow().get(0);
+                                    eventItem[pos] = new CultureEventItem(cultureEvent.getCULTCODE(),
+                                                                          cultureEvent.getMAIN_IMG(),
+                                                                          cultureEvent.getIS_FREE(),
+                                                                          cultureEvent.getCODENAME(),
+                                                                          cultureEvent.getTITLE(),
+                                                                          cultureEvent.getGCODE(),
+                                                                          cultureEvent.getPLACE(),
+                                                                          cultureEvent.getSTRTDATE(),
+                                                                          cultureEvent.getEND_DATE(),
+                                                                          isBookmark);
+                                    searchItems.add(eventItem[pos]);
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                } finally {
+                                    realm.close();
+                                }
+                            }
                         }
+                        return searchItems;
+                    }
 
-                        @Override
-                        public void onFailure(Call<CultureEventData> call, Throwable t) {
-
-                        }
-                    });
-                    defaultLayout.setVisibility(View.INVISIBLE);
-                }
+                    @Override
+                    protected void onPostExecute(ArrayList<CultureEventItem> searchItems) {
+                        super.onPostExecute(searchItems);
+                        initGridRecyclerView(searchItems);
+                    }
+                }.execute();
             }
 
             @Override
@@ -218,9 +245,10 @@ public class CultureEventSearchActivity extends AppCompatActivity {
         });
     }
 
-    // 검색 GridView 초기화
-    public void initGridViewEvents(ArrayList<CultureEventItem> items) {
-        mAdapter = new GridViewAdapter(getApplicationContext(), items);
-        gridView.setAdapter(mAdapter);
+    public void initGridRecyclerView(ArrayList<CultureEventItem> eventItems) {
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new GridLayoutManager(getApplicationContext(), 2));
+        mAdapter = new CultureEventAdapter(getApplicationContext(), eventItems);
+        recyclerView.setAdapter(mAdapter);
     }
 }

@@ -4,16 +4,13 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <GridView
-        android:id="@+id/gridView_cultureEvent_bookmark"
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/gridRecyclerView_cultureEvent_bookmark"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-        android:horizontalSpacing="10dp"
-        android:numColumns="2"
-        android:scrollbars="none"
-        android:verticalSpacing="10dp" />
+        android:scrollbars="none" />
 
     <FrameLayout
         android:id="@+id/defaultLayout_cultureEvent_bookmark"

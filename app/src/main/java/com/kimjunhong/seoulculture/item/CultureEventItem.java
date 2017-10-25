@@ -14,8 +14,9 @@ public class CultureEventItem {
     String place;
     String strtDate;
     String endDate;
+    boolean bookmark;
 
-    public CultureEventItem(int cultCode, String mainImage, String isFree, String codeName, String title, String gCode, String place, String strtDate, String endDate) {
+    public CultureEventItem(int cultCode, String mainImage, String isFree, String codeName, String title, String gCode, String place, String strtDate, String endDate, boolean bookmark) {
         this.cultCode = cultCode;
         this.mainImage = mainImage;
         this.isFree = isFree;
@@ -25,6 +26,7 @@ public class CultureEventItem {
         this.place = place;
         this.strtDate = strtDate;
         this.endDate = endDate;
+        this.bookmark = bookmark;
     }
 
     public int getCultCode() {
@@ -61,5 +63,9 @@ public class CultureEventItem {
 
     public String getEndDate() {
         return endDate;
+    }
+
+    public boolean isBookmark() {
+        return bookmark;
     }
 }

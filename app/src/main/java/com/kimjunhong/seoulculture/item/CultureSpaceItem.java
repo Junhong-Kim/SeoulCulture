@@ -12,8 +12,9 @@ public class CultureSpaceItem {
     String addr;
     String entrFree;
     String etcDesc;
+    boolean bookmark;
 
-    public CultureSpaceItem(String facCode, String codeName, String facName, String mainImg, String addr, String entrFree, String etcDesc) {
+    public CultureSpaceItem(String facCode, String codeName, String facName, String mainImg, String addr, String entrFree, String etcDesc, boolean bookmark) {
         this.facCode = facCode;
         this.codeName = codeName;
         this.facName = facName;
@@ -21,6 +22,7 @@ public class CultureSpaceItem {
         this.addr = addr;
         this.entrFree = entrFree;
         this.etcDesc = etcDesc;
+        this.bookmark = bookmark;
     }
 
     public String getFacCode() {
@@ -49,5 +51,9 @@ public class CultureSpaceItem {
 
     public String getEtcDesc() {
         return etcDesc;
+    }
+
+    public boolean isBookmark() {
+        return bookmark;
     }
 }

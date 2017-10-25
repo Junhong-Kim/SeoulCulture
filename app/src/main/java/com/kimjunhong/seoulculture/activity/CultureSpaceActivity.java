@@ -13,6 +13,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -31,13 +32,17 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.kimjunhong.seoulculture.CultureSpaceService;
 import com.kimjunhong.seoulculture.R;
 import com.kimjunhong.seoulculture.model.CultureSpace;
+import com.kimjunhong.seoulculture.model.CultureSpaceBookmark;
 import com.kimjunhong.seoulculture.model.CultureSpaceData;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.realm.Realm;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+
+import static com.kimjunhong.seoulculture.activity.MainActivity.mContext;
 
 /**
  * Created by INMA on 2017. 8. 8..
@@ -61,6 +66,8 @@ public class CultureSpaceActivity extends AppCompatActivity implements OnMapRead
     @BindView(R.id.cultureSpace_map_layout) FrameLayout mapLayout;
 
     private int id;
+    private boolean isBookmark = false;
+    private Realm realm;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -162,9 +169,56 @@ public class CultureSpaceActivity extends AppCompatActivity implements OnMapRead
                 bookmark.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        Toast.makeText(getApplicationContext(), "Bookmark", Toast.LENGTH_SHORT).show();
+                        realm = Realm.getDefaultInstance();
+                        try {
+                            // 북마크 추가
+                            realm.executeTransaction(new Realm.Transaction() {
+                                @Override
+                                public void execute(Realm realm) {
+                                    CultureSpaceBookmark spaceBookmark = new CultureSpaceBookmark();
+                                    spaceBookmark.setSpaceId(Integer.parseInt(cultureSpace.getFAC_CODE()));
+
+                                    CultureSpaceBookmark.create(realm, spaceBookmark);
+                                    bookmark.setImageResource(R.drawable.ic_heart_filled);
+
+                                    Toast.makeText(mContext, "북마크에 추가되었습니다", Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                        } catch (Exception e) {
+                            // 북마크 삭제
+                            realm.executeTransaction(new Realm.Transaction() {
+                                @Override
+                                public void execute(Realm realm) {
+                                    CultureSpaceBookmark.delete(realm, Integer.parseInt(cultureSpace.getFAC_CODE()));
+                                    bookmark.setImageResource(R.drawable.ic_heart);
+
+                                    Toast.makeText(mContext, "북마크가 삭제되었습니다", Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                        } finally {
+                            realm.close();
+                        }
                     }
                 });
+                // 북마크 표시
+                try {
+                    realm = Realm.getDefaultInstance();
+                    realm.executeTransaction(new Realm.Transaction() {
+                        @Override
+                        public void execute(Realm realm) {
+                            CultureSpaceBookmark spaceBookmark = CultureSpaceBookmark.findOne(realm, Integer.parseInt(cultureSpace.getFAC_CODE()));
+                            isBookmark = true;
+                            Log.v("log", "bookmark : " + spaceBookmark.getSpaceId());
+                        }
+                    });
+                } catch (Exception e) {
+                    isBookmark = false;
+                } finally {
+                    if(isBookmark) {
+                        bookmark.setImageResource(R.drawable.ic_heart_filled);
+                    }
+                    realm.close();
+                }
                 // 문화공간명
                 facName.setText(cultureSpace.getFAC_NAME());
                 // 주소

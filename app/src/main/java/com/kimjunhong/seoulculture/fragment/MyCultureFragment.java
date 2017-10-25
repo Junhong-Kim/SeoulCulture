@@ -38,7 +38,7 @@ public class MyCultureFragment extends Fragment {
     @BindView(R.id.my_culture_review) LinearLayout reviewLayout;
     @BindView(R.id.my_culture_version) TextView version;
 
-    Realm realm;
+    private Realm realm;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -63,51 +63,6 @@ public class MyCultureFragment extends Fragment {
                 startActivity(new Intent(getActivity(), BookmarkActivity.class));
             }
         });
-
-        // 북마크 개수
-        setBookmarkCount();
-
-        realm = Realm.getDefaultInstance();
-        realm.executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(final Realm realm) {
-                // 현재 문화행사 북마크 개수
-                RealmResults<CultureEventBookmark> eventBookmarks = CultureEventBookmark.findAll(realm);
-
-                // 지난 문화행사 삭제 프로세스
-                for(int i = 0; i < eventBookmarks.size(); i++) {
-                    final CultureEventBookmark bookmark = eventBookmarks.get(i);
-
-                    CultureEventService service = CultureEventService.retrofit.create(CultureEventService.class);
-                    Call<CultureEventData> call = service.getCultureEvent(1, 1, bookmark.getEventId());
-                    call.enqueue(new retrofit2.Callback<CultureEventData>() {
-                        @Override
-                        public void onResponse(Call<CultureEventData> call, Response<CultureEventData> response) {
-                            try {
-                                // 믄화행사 불러오기
-                                response.body().getSearchConcertDetailService().getRow().get(0);
-                            } catch (Exception e) {
-                                // 지난 문화행사 삭제
-                                realm.executeTransaction(new Realm.Transaction() {
-                                    @Override
-                                    public void execute(Realm realm) {
-                                        CultureEventBookmark.delete(realm, bookmark.getEventId());
-                                    }
-                                });
-                            } finally {
-                                realm.close();
-                            }
-                        }
-
-                        @Override
-                        public void onFailure(Call<CultureEventData> call, Throwable t) {
-
-                        }
-                    });
-                }
-            }
-        });
-
         // 아이콘 라이선스
         licenseLayout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -115,7 +70,6 @@ public class MyCultureFragment extends Fragment {
                 startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://icons8.com/")));
             }
         });
-
         // 리뷰
         reviewLayout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -123,7 +77,6 @@ public class MyCultureFragment extends Fragment {
                 startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=com.kimjunhong.seoulculture")));
             }
         });
-
         // 버전 이름
         try {
             PackageInfo pi = getActivity().getPackageManager().getPackageInfo(getActivity().getPackageName(), 0);
@@ -132,9 +85,13 @@ public class MyCultureFragment extends Fragment {
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }
+
+        setBookmarkCount();
+        deleteExpiredBookmark();
     }
 
-    private void setBookmarkCount() {
+    // 북마크 개수
+   private void setBookmarkCount() {
         try {
             realm = realm.getDefaultInstance();
             realm.executeTransaction(new Realm.Transaction() {
@@ -149,5 +106,53 @@ public class MyCultureFragment extends Fragment {
         } finally {
             realm.close();
         }
+    }
+
+    // 기간이 지난 북마크 삭제
+   private void deleteExpiredBookmark() {
+       try {
+           realm = Realm.getDefaultInstance();
+           realm.executeTransaction(new Realm.Transaction() {
+               @Override
+               public void execute(final Realm realm) {
+                   // 현재 문화행사 북마크 개수
+                   RealmResults<CultureEventBookmark> eventBookmarks = CultureEventBookmark.findAll(realm);
+
+                   // 지난 문화행사 삭제 프로세스
+                   for (int i = 0; i < eventBookmarks.size(); i++) {
+                       final CultureEventBookmark bookmark = eventBookmarks.get(i);
+
+                       CultureEventService service = CultureEventService.retrofit.create(CultureEventService.class);
+                       Call<CultureEventData> call = service.getCultureEvent(1, 1, bookmark.getEventId());
+                       call.enqueue(new retrofit2.Callback<CultureEventData>() {
+                           @Override
+                           public void onResponse(Call<CultureEventData> call, Response<CultureEventData> response) {
+                               try {
+                                   // 믄화행사 불러오기
+                                   response.body().getSearchConcertDetailService().getRow().get(0);
+                               } catch (Exception e) {
+                                   // 지난 문화행사 삭제
+                                   realm.executeTransaction(new Realm.Transaction() {
+                                       @Override
+                                       public void execute(Realm realm) {
+                                           CultureEventBookmark.delete(realm, bookmark.getEventId());
+                                       }
+                                   });
+                               } finally {
+                                   realm.close();
+                               }
+                           }
+
+                           @Override
+                           public void onFailure(Call<CultureEventData> call, Throwable t) {
+
+                           }
+                       });
+                   }
+               }
+           });
+       } finally {
+           realm.close();
+       }
     }
 }

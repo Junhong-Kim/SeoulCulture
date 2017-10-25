@@ -12,6 +12,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -23,6 +24,7 @@ import com.bumptech.glide.Glide;
 import com.kimjunhong.seoulculture.CultureEventService;
 import com.kimjunhong.seoulculture.R;
 import com.kimjunhong.seoulculture.model.CultureEvent;
+import com.kimjunhong.seoulculture.model.CultureEventBookmark;
 import com.kimjunhong.seoulculture.model.CultureEventData;
 
 import java.text.ParseException;
@@ -31,9 +33,12 @@ import java.util.Date;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.realm.Realm;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+
+import static com.kimjunhong.seoulculture.activity.MainActivity.mContext;
 
 /**
  * Created by INMA on 2017. 7. 19..
@@ -58,6 +63,8 @@ public class CultureEventActivity extends AppCompatActivity {
     @BindView(R.id.cultureEvent_bookmark) ImageView bookmark;
 
     private SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+    private boolean isBookmark = false;
+    private Realm realm;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -184,9 +191,56 @@ public class CultureEventActivity extends AppCompatActivity {
                 bookmark.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        Toast.makeText(getApplicationContext(), "Clicked", Toast.LENGTH_SHORT).show();
+                        realm = Realm.getDefaultInstance();
+                        try {
+                            // 북마크 추가
+                            realm.executeTransaction(new Realm.Transaction() {
+                                @Override
+                                public void execute(Realm realm) {
+                                    CultureEventBookmark eventBookmark = new CultureEventBookmark();
+                                    eventBookmark.setEventId(cultureEvent.getCULTCODE());
+
+                                    CultureEventBookmark.create(realm, eventBookmark);
+                                    bookmark.setImageResource(R.drawable.ic_heart_filled);
+
+                                    Toast.makeText(mContext, "북마크에 추가되었습니다", Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                        } catch (Exception e) {
+                            // 북마크 삭제
+                            realm.executeTransaction(new Realm.Transaction() {
+                                @Override
+                                public void execute(Realm realm) {
+                                    CultureEventBookmark.delete(realm, cultureEvent.getCULTCODE());
+                                    bookmark.setImageResource(R.drawable.ic_heart);
+
+                                    Toast.makeText(mContext, "북마크가 삭제되었습니다", Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                        } finally {
+                            realm.close();
+                        }
                     }
                 });
+                // 북마크 표시
+                try {
+                    realm = Realm.getDefaultInstance();
+                    realm.executeTransaction(new Realm.Transaction() {
+                        @Override
+                        public void execute(Realm realm) {
+                            CultureEventBookmark eventBookmark = CultureEventBookmark.findOne(realm, cultureEvent.getCULTCODE());
+                            isBookmark = true;
+                            Log.v("log", "bookmarked : " + eventBookmark.getEventId());
+                        }
+                    });
+                } catch (Exception e) {
+                    isBookmark = false;
+                } finally {
+                    if(isBookmark) {
+                        bookmark.setImageResource(R.drawable.ic_heart_filled);
+                    }
+                    realm.close();
+                }
                 // 장르 이름
                 codeName.setText(cultureEvent.getCODENAME());
                 // 자치구
