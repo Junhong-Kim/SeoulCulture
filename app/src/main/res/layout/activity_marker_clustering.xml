@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -91,7 +92,7 @@
                         android:ellipsize="end"
                         android:maxLines="1"
                         android:text="문화공간명"
-                        android:textColor="@color/colorPrimary"
+                        android:textColor="@color/colorPrimaryDark"
                         android:textStyle="bold" />
 
                     <TextView
@@ -113,6 +114,42 @@
                         android:text="정보"
                         android:textColor="@color/gray" />
                 </LinearLayout>
+            </LinearLayout>
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/map_loading_indicator_view_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/transparent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <com.wang.avi.AVLoadingIndicatorView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:indicatorColor="@color/colorPrimaryDark"
+                    app:indicatorName="BallBeatIndicator" />
+
+                <TextView
+                    android:id="@+id/aiv_loading_indicator_view_textView"
+                    style="@style/MediumFont"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:text="잠시만 기다려주세요" />
+
+                <TextView
+                    style="@style/SmallFont"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:text="문화공간을 불러오고 있습니다"
+                    android:textColor="@color/gray" />
             </LinearLayout>
         </FrameLayout>
     </RelativeLayout>

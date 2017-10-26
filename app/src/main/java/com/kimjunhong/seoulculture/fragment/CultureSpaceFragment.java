@@ -1,28 +1,19 @@
 package com.kimjunhong.seoulculture.fragment;
 
-import android.content.Context;
-import android.content.Intent;
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.SpannableString;
-import android.text.style.AbsoluteSizeSpan;
-import android.text.style.StyleSpan;
-import android.util.DisplayMetrics;
 import android.util.Log;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import com.kimjunhong.seoulculture.CultureSpaceService;
 import com.kimjunhong.seoulculture.R;
-import com.kimjunhong.seoulculture.activity.MarkerClusteringActivity;
 import com.kimjunhong.seoulculture.adapter.CultureSpaceAdapter;
 import com.kimjunhong.seoulculture.item.CultureSpaceItem;
 import com.kimjunhong.seoulculture.model.CultureSpace;
@@ -43,8 +34,6 @@ import retrofit2.Response;
  */
 
 public class CultureSpaceFragment extends Fragment {
-    @BindView(R.id.cultureSpace_find_maps_text) TextView findMapsText;
-    @BindView(R.id.cultureSpace_find_maps_layout) LinearLayout findMapsLayout;
     @BindView(R.id.recyclerView_cultureSpace) RecyclerView recyclerView;
 
     private ArrayList<CultureSpaceItem> spaceItems = new ArrayList<>();
@@ -62,7 +51,6 @@ public class CultureSpaceFragment extends Fragment {
         ButterKnife.bind(this, view);
 
         setHasOptionsMenu(true);
-        initView();
         getCultureSpaces(startIndex, endIndex);
         return view;
     }
@@ -71,6 +59,12 @@ public class CultureSpaceFragment extends Fragment {
     public void onResume() {
         super.onResume();
         getActivity().invalidateOptionsMenu();
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.search_culture_space, menu);
     }
 
     private void getCultureSpaces(final int startIndex, int endIndex) {
@@ -154,28 +148,5 @@ public class CultureSpaceFragment extends Fragment {
                 }
             }
         });
-    }
-
-    private void initView() {
-        findMapsText.setText(spannableString());
-        findMapsLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(getActivity(), MarkerClusteringActivity.class));
-            }
-        });
-    }
-
-    private SpannableString spannableString() {
-        SpannableString string = new SpannableString(findMapsText.getText());
-        string.setSpan(new StyleSpan(Typeface.BOLD), 5, 9, 0);
-        string.setSpan(new AbsoluteSizeSpan((int) dpToPx(getActivity(), 15)), 5, 9, 0);
-
-        return string;
-    }
-
-    private float dpToPx(Context context, float dp) {
-        DisplayMetrics dm = context.getResources().getDisplayMetrics();
-        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, dm);
     }
 }

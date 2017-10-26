@@ -47,6 +47,7 @@ public class CultureEventWithGenreFragment extends Fragment {
     @BindView(R.id.recyclerView_cultureEvent_with_genre) RecyclerView recyclerViewGenre;
     @BindView(R.id.gridRecyclerView_cultureEvent_with_genre) RecyclerView recyclerView;
     @BindView(R.id.defaultLayout_cultureEvent_with_genre) FrameLayout defaultLayout;
+    @BindView(R.id.event_loading_indicator_view_layout) FrameLayout loadingLayout;
 
     private ArrayList<CultureEventGenreItem> genreItems = new ArrayList<>();
     public static ArrayList<CultureEventItem> eventItems = new ArrayList<>();
@@ -170,6 +171,7 @@ public class CultureEventWithGenreFragment extends Fragment {
                     @Override
                     protected void onProgressUpdate(Integer... integers) {
                         super.onProgressUpdate(integers);
+                        loadingLayout.setVisibility(View.VISIBLE);
                         Log.v("log", "Progress : " + integers[0] + "%");
                     }
 
@@ -177,7 +179,7 @@ public class CultureEventWithGenreFragment extends Fragment {
                     protected void onPostExecute(ArrayList<CultureEventItem> eventItems) {
                         super.onPostExecute(eventItems);
                         initGridRecyclerView(eventItems);
-
+                        loadingLayout.setVisibility(View.INVISIBLE);
                     }
                 }.execute();
             }

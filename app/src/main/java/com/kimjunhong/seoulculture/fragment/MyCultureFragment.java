@@ -86,7 +86,6 @@ public class MyCultureFragment extends Fragment {
             e.printStackTrace();
         }
 
-        setBookmarkCount();
         deleteExpiredBookmark();
     }
 
@@ -140,6 +139,7 @@ public class MyCultureFragment extends Fragment {
                                    });
                                } finally {
                                    realm.close();
+                                   setBookmarkCount();
                                }
                            }
 

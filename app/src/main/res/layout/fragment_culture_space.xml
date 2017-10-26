@@ -4,32 +4,6 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <LinearLayout
-        android:id="@+id/cultureSpace_find_maps_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/colorAccent"
-        android:gravity="center"
-        android:orientation="horizontal"
-        android:paddingBottom="6dp"
-        android:paddingTop="6dp">
-
-        <TextView
-            android:id="@+id/cultureSpace_find_maps_text"
-            style="@style/SmallFont"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="지도에서 문화공간 찾기"
-            android:textColor="@color/white" />
-
-        <ImageView
-            android:layout_width="15dp"
-            android:layout_height="15dp"
-            android:layout_marginLeft="2dp"
-            android:src="@drawable/ic_map_marker" />
-    </LinearLayout>
-
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recyclerView_cultureSpace"
         android:layout_width="match_parent"

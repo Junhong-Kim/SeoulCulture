@@ -75,9 +75,9 @@
                         style="@style/MediumFont"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="5dp"
+                        android:layout_marginTop="2dp"
                         android:text="문화공간명"
-                        android:textColor="@color/colorPrimary"
+                        android:textColor="@color/colorPrimaryDark"
                         android:textStyle="bold" />
 
                     <TextView
@@ -107,14 +107,14 @@
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="150dp"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="10dp">
 
                 <fragment
                     android:id="@+id/cultureSpace_map"
                     class="com.google.android.gms.maps.MapFragment"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
+                    android:layout_height="150dp" />
 
                 <TextView
                     android:id="@+id/cultureSpace_map_addr"

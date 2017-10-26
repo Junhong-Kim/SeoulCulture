@@ -15,6 +15,7 @@ import com.kimjunhong.seoulculture.R;
 import com.kimjunhong.seoulculture.fragment.CultureEventFragment;
 import com.kimjunhong.seoulculture.fragment.CultureSpaceFragment;
 import com.kimjunhong.seoulculture.fragment.MyCultureFragment;
+import com.kimjunhong.seoulculture.util.BackPressCloseHandler;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -25,6 +26,7 @@ public class MainActivity extends AppCompatActivity {
     @BindView(R.id.bottomNavigation) BottomNavigationView bottomNavigationView;
 
     public static Context mContext;
+    private BackPressCloseHandler backPressCloseHandler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +37,7 @@ public class MainActivity extends AppCompatActivity {
 
         initToolbar();
         initBottomNavigationView();
+        backPressCloseHandler = new BackPressCloseHandler(this);
 
         if(container != null) {
             if(savedInstanceState != null) {
@@ -53,10 +56,19 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
+    public void onBackPressed() {
+        backPressCloseHandler.onBackPressed();
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_search_culture_event:
                 startActivity(new Intent(this, CultureEventSearchActivity.class));
+                return true;
+
+            case R.id.menu_search_culture_space:
+                startActivity(new Intent(this, MarkerClusteringActivity.class));
                 return true;
         }
 

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -53,6 +54,42 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
                     android:text="문화행사 정보가 없습니다"
+                    android:textColor="@color/gray" />
+            </LinearLayout>
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/event_loading_indicator_view_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/sub"
+            android:visibility="invisible">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <com.wang.avi.AVLoadingIndicatorView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:indicatorColor="@color/colorPrimaryDark"
+                    app:indicatorName="BallBeatIndicator" />
+
+                <TextView
+                    style="@style/MediumFont"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:text="잠시만 기다려주세요" />
+
+                <TextView
+                    style="@style/SmallFont"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:text="문화행사를 불러오고 있습니다"
                     android:textColor="@color/gray" />
             </LinearLayout>
         </FrameLayout>

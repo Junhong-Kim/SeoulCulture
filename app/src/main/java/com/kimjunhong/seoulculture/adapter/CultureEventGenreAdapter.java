@@ -49,7 +49,7 @@ public class CultureEventGenreAdapter extends RecyclerView.Adapter<CultureEventG
 
         // 선택 항목 강조
         if(selectedPosition == position) {
-            holder.genre.setBackgroundResource(R.drawable.bg_primary_corner);
+            holder.genre.setBackgroundResource(R.drawable.bg_primary_dark_corner);
             holder.genre.setTextColor(ContextCompat.getColor(mContext, R.color.white));
         } else {
             holder.genre.setBackgroundResource(R.drawable.bg_white_corner);

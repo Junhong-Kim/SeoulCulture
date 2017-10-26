@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -61,6 +62,7 @@ import static com.kimjunhong.seoulculture.activity.MainActivity.mContext;
 
 public class MarkerClusteringActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener, GoogleMap.OnMapClickListener {
     @BindView(R.id.toolbar) Toolbar toolbar;
+    @BindView(R.id.toolbar_title) TextView toolbarTitle;
     @BindView(R.id.marker_fac_info_layout) FrameLayout facInfoLayout;
     @BindView(R.id.marker_cultureSpace_item_mainImage) ImageView facMainImg;
     @BindView(R.id.marker_cultureSpace_item_isFree) TextView facIsFree;
@@ -69,6 +71,7 @@ public class MarkerClusteringActivity extends AppCompatActivity implements OnMap
     @BindView(R.id.marker_cultureSpace_item_facName) TextView facName;
     @BindView(R.id.marker_cultureSpace_item_addr) TextView facAddr;
     @BindView(R.id.marker_cultureSpace_item_etcDesc) TextView facEtcDesc;
+    @BindView(R.id.map_loading_indicator_view_layout) FrameLayout mapLoading;
 
     // ClusterManager<CultureSpaceMarkerItem> clusterManager;
     private View customMarkerView;
@@ -133,38 +136,52 @@ public class MarkerClusteringActivity extends AppCompatActivity implements OnMap
     }
 
     private void getMarkerItems() {
-        final CultureSpaceService service = CultureSpaceService.retrofit.create(CultureSpaceService.class);
-        Call<CultureSpaceData> call = service.getCultureSpaces(1, 1);
+        final CultureSpaceService spaceService = CultureSpaceService.retrofit.create(CultureSpaceService.class);
+        // 문화공간 정보 가져오기
+        Call<CultureSpaceData> call = spaceService.getCultureSpaces(1, 1);
         call.enqueue(new Callback<CultureSpaceData>() {
             @Override
             public void onResponse(Call<CultureSpaceData> call, Response<CultureSpaceData> response) {
-                final int size = response.body().getSearchCulturalFacilitiesDetailService().getList_total_count();
-                call = service.getCultureSpaces(1, size);
+                // 문화공간 전체 개수
+                final int itemSize = response.body().getSearchCulturalFacilitiesDetailService().getList_total_count();
+                call = spaceService.getCultureSpaces(1, itemSize);
                 call.enqueue(new Callback<CultureSpaceData>() {
                     @Override
-                    public void onResponse(Call<CultureSpaceData> call, Response<CultureSpaceData> response) {
-                        ArrayList<CultureSpace> row = response.body().getSearchCulturalFacilitiesDetailService().getRow();
-
+                    public void onResponse(Call<CultureSpaceData> call, final Response<CultureSpaceData> response) {
+                        final ArrayList<CultureSpace> row = response.body().getSearchCulturalFacilitiesDetailService().getRow();
                         final ArrayList<CultureSpaceMarkerItem> markerList = new ArrayList<>();
-                        for(int i = 0; i < size; i ++) {
-                            // 문화공간 좌표
-                            double lat = row.get(i).getX_COORD();
-                            double lng = row.get(i).getY_COORD();
 
-                            // clusterManager.addItem(new CultureSpaceMarkerItem(row.get(i).getFAC_NAME(),
-                            //                                                  new LatLng(lat, lng)));
+                        new AsyncTask<Void, Void, ArrayList<CultureSpaceMarkerItem>>() {
+                            @Override
+                            protected ArrayList<CultureSpaceMarkerItem> doInBackground(Void... voids) {
+                                for(int i = 0; i < itemSize; i ++) {
+                                    // 문화공간 좌표
+                                    double lat = row.get(i).getX_COORD();
+                                    double lng = row.get(i).getY_COORD();
 
-                            markerList.add(new CultureSpaceMarkerItem(row.get(i).getFAC_CODE(),
-                                                                      row.get(i).getFAC_NAME(),
-                                                                      new LatLng(lat, lng)));
-                        }
+                                    // clusterManager.addItem(new CultureSpaceMarkerItem(row.get(i).getFAC_NAME(),
+                                    //                                                  new LatLng(lat, lng)));
 
-                        for(CultureSpaceMarkerItem markerItem : markerList) {
-                            addMarker(markerItem, false);
-                        }
+                                    markerList.add(new CultureSpaceMarkerItem(row.get(i).getFAC_CODE(),
+                                                                              row.get(i).getFAC_NAME(),
+                                                                              new LatLng(lat, lng)));
+                                }
+                                return markerList;
+                            }
 
-                        // Refresh cluster
-                        // clusterManager.cluster();
+                            @Override
+                            protected void onPostExecute(ArrayList<CultureSpaceMarkerItem> cultureSpaceMarkerItems) {
+                                super.onPostExecute(cultureSpaceMarkerItems);
+                                for(CultureSpaceMarkerItem markerItem : cultureSpaceMarkerItems) {
+                                    addMarker(markerItem, false);
+                                }
+                                mapLoading.setVisibility(View.INVISIBLE);
+                                // Refresh cluster
+                                // clusterManager.cluster();
+
+
+                            }
+                        }.execute();
                     }
 
                     @Override
@@ -189,10 +206,10 @@ public class MarkerClusteringActivity extends AppCompatActivity implements OnMap
         markerTitle.setText(facName);
 
         if (isSelectedMarker) {
-            markerTitle.setBackgroundResource(R.drawable.ic_marker_box_fill);
-            markerTitle.setTextColor(Color.WHITE);
+            markerTitle.setBackgroundResource(R.drawable.ic_marker_click);
+            markerTitle.setTextColor(Color.BLACK);
         } else {
-            markerTitle.setBackgroundResource(R.drawable.ic_marker_box);
+            markerTitle.setBackgroundResource(R.drawable.ic_marker);
             markerTitle.setTextColor(Color.BLACK);
         }
 
@@ -233,6 +250,8 @@ public class MarkerClusteringActivity extends AppCompatActivity implements OnMap
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
+
+        toolbarTitle.setText("문화공간 찾기");
     }
 
     @Override

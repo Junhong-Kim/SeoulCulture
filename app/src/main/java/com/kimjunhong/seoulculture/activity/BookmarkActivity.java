@@ -65,9 +65,9 @@ public class BookmarkActivity extends AppCompatActivity {
     }
 
     private void initView() {
-        cultureEventBookmark.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorAccent));
+        cultureEventBookmark.setBackgroundResource(R.drawable.bg_accent_top_right_corner);
         cultureEventBookmark.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.white));
-        cultureSpaceBookmark.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.white));
+        cultureSpaceBookmark.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.sub));
         cultureSpaceBookmark.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.black));
 
         getSupportFragmentManager().beginTransaction().add(R.id.bookmark_container, new CultureEventBookmarkFragment()).commit();
@@ -75,9 +75,9 @@ public class BookmarkActivity extends AppCompatActivity {
         cultureEventBookmark.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                cultureEventBookmark.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorAccent));
+                cultureEventBookmark.setBackgroundResource(R.drawable.bg_accent_top_right_corner);
                 cultureEventBookmark.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.white));
-                cultureSpaceBookmark.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.white));
+                cultureSpaceBookmark.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.sub));
                 cultureSpaceBookmark.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.black));
 
                 FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
@@ -91,7 +91,7 @@ public class BookmarkActivity extends AppCompatActivity {
             public void onClick(View view) {
                 cultureEventBookmark.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.white));
                 cultureEventBookmark.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.black));
-                cultureSpaceBookmark.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorAccent));
+                cultureSpaceBookmark.setBackgroundResource(R.drawable.bg_accent_top_left_corner);
                 cultureSpaceBookmark.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.white));
 
                 FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();

@@ -9,7 +9,7 @@
         style="@style/MediumFont"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/ic_marker_box"
+        android:background="@drawable/ic_marker"
         android:gravity="center"
         android:text="Name" />
 </LinearLayout>

@@ -49,9 +49,9 @@ public class CultureEventFragment extends Fragment {
     }
 
     private void initView() {
-        date.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.colorAccent));
+        date.setBackgroundResource(R.drawable.bg_accent_top_right_corner);
         date.setTextColor(ContextCompat.getColor(getActivity(), R.color.white));
-        genre.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.white));
+        genre.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.sub));
         genre.setTextColor(ContextCompat.getColor(getActivity(), R.color.black));
 
         getFragmentManager().beginTransaction().add(R.id.cultureEvent_container, new CultureEventWithDateFragment()).commit();
@@ -59,9 +59,9 @@ public class CultureEventFragment extends Fragment {
         date.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                date.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.colorAccent));
+                date.setBackgroundResource(R.drawable.bg_accent_top_right_corner);
                 date.setTextColor(ContextCompat.getColor(getActivity(), R.color.white));
-                genre.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.white));
+                genre.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.sub));
                 genre.setTextColor(ContextCompat.getColor(getActivity(), R.color.black));
 
                 FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
@@ -73,9 +73,9 @@ public class CultureEventFragment extends Fragment {
         genre.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                date.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.white));
+                date.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.sub));
                 date.setTextColor(ContextCompat.getColor(getActivity(), R.color.black));
-                genre.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.colorAccent));
+                genre.setBackgroundResource(R.drawable.bg_accent_top_left_corner);
                 genre.setTextColor(ContextCompat.getColor(getActivity(), R.color.white));
 
                 FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();

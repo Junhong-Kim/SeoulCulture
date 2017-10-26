@@ -69,9 +69,9 @@
                     style="@style/MediumFont"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
+                    android:layout_marginTop="2dp"
                     android:text="제목"
-                    android:textColor="@color/colorPrimary"
+                    android:textColor="@color/colorPrimaryDark"
                     android:textStyle="bold" />
 
                 <LinearLayout
@@ -125,7 +125,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="0000-00-00"
-                        android:textColor="@color/colorPrimary" />
+                        android:textColor="@color/colorPrimaryDark" />
                 </LinearLayout>
 
                 <FrameLayout
@@ -174,7 +174,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="0000-00-00"
-                        android:textColor="@color/colorPrimary" />
+                        android:textColor="@color/colorPrimaryDark" />
                 </LinearLayout>
             </LinearLayout>
 
