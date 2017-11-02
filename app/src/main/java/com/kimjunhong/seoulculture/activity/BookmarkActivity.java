@@ -67,7 +67,7 @@ public class BookmarkActivity extends AppCompatActivity {
     private void initView() {
         cultureEventBookmark.setBackgroundResource(R.drawable.bg_accent_top_right_corner);
         cultureEventBookmark.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.white));
-        cultureSpaceBookmark.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.sub));
+        cultureSpaceBookmark.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorDefault));
         cultureSpaceBookmark.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.black));
 
         getSupportFragmentManager().beginTransaction().add(R.id.bookmark_container, new CultureEventBookmarkFragment()).commit();
@@ -77,7 +77,7 @@ public class BookmarkActivity extends AppCompatActivity {
             public void onClick(View view) {
                 cultureEventBookmark.setBackgroundResource(R.drawable.bg_accent_top_right_corner);
                 cultureEventBookmark.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.white));
-                cultureSpaceBookmark.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.sub));
+                cultureSpaceBookmark.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorDefault));
                 cultureSpaceBookmark.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.black));
 
                 FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
@@ -89,7 +89,7 @@ public class BookmarkActivity extends AppCompatActivity {
         cultureSpaceBookmark.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                cultureEventBookmark.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.white));
+                cultureEventBookmark.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorDefault));
                 cultureEventBookmark.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.black));
                 cultureSpaceBookmark.setBackgroundResource(R.drawable.bg_accent_top_left_corner);
                 cultureSpaceBookmark.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.white));

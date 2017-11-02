@@ -51,7 +51,7 @@ public class CultureEventFragment extends Fragment {
     private void initView() {
         date.setBackgroundResource(R.drawable.bg_accent_top_right_corner);
         date.setTextColor(ContextCompat.getColor(getActivity(), R.color.white));
-        genre.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.sub));
+        genre.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.colorDefault));
         genre.setTextColor(ContextCompat.getColor(getActivity(), R.color.black));
 
         getFragmentManager().beginTransaction().add(R.id.cultureEvent_container, new CultureEventWithDateFragment()).commit();
@@ -61,7 +61,7 @@ public class CultureEventFragment extends Fragment {
             public void onClick(View view) {
                 date.setBackgroundResource(R.drawable.bg_accent_top_right_corner);
                 date.setTextColor(ContextCompat.getColor(getActivity(), R.color.white));
-                genre.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.sub));
+                genre.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.colorDefault));
                 genre.setTextColor(ContextCompat.getColor(getActivity(), R.color.black));
 
                 FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
@@ -73,7 +73,7 @@ public class CultureEventFragment extends Fragment {
         genre.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                date.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.sub));
+                date.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.colorDefault));
                 date.setTextColor(ContextCompat.getColor(getActivity(), R.color.black));
                 genre.setBackgroundResource(R.drawable.bg_accent_top_left_corner);
                 genre.setTextColor(ContextCompat.getColor(getActivity(), R.color.white));
